@@ -4,6 +4,6 @@ Are you sick of standing around all day? Craving a place to sit back and relax? 
 
 ## Developers
 - Jadyn Falls
-- Patrick McCor
+- Patrick McCoy
 - Luka Ratiani
 - Jacob Stein
