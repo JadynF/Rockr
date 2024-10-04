@@ -7,7 +7,7 @@ version: 2
 
 # Set the OS and other tools you might need
 build:
-  os: windows-10
+  os: "ubuntu-22.04"
   tools:
     nodejs: "20"
     
