@@ -10,8 +10,7 @@ build:
   tools:
     python: 
         version: 3.12
-        install:
-            - requirements: requirements.txt
+        requirements: requirements.txt
     # You can also specify other tool versions:
     # nodejs: "20"
     # rust: "1.70"
