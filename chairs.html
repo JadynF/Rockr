@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chairs List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chairs List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Color</th>
+                <th>Size</th>
+                <th>Style</th>
+                <th>Price</th>
+                <th>Location</th>
+                <th>Material</th>
+                <th>Chair Condition</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($chairs as $chair): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($chair['id']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['color']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['size']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['style']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['price']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['location']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['material']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['chair_condition']); ?></td>
+                    <td><?php echo htmlspecialchars($chair['image']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</body>
+</html>
