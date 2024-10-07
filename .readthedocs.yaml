@@ -9,8 +9,8 @@ build:
   os: ubuntu-22.04
   tools:
     python: 
-        version: 3.12
-        requirements: requirements.txt
+        install:
+            - requirements: requirements.txt
     # You can also specify other tool versions:
     # nodejs: "20"
     # rust: "1.70"
