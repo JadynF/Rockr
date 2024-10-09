@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Feature Documentation &#8212; Rockr 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="feature-documentation">
+<h1>Feature Documentation<a class="headerlink" href="#feature-documentation" title="Link to this heading">¶</a></h1>
+<hr class="docutils" />
+<blockquote></section>
+<section id="react-app-client">
+<h1>React App Client<a class="headerlink" href="#react-app-client" title="Link to this heading">¶</a></h1>
+<hr class="docutils" />
+<section id="components">
+<h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
+<blockquote><section id="header-js">
+<h3>Header.js<a class="headerlink" href="#header-js" title="Link to this heading">¶</a></h3>
+<p>Returns a header component. Creates a strip at the top of the page with a title and side-menu button.</p>
+<p>MUST be used alongside SideMenu component</p>
+<p>Takes (isMenuVisible : useState) and (toggleMenu : method) props.</p>
+<ul class="simple">
+<li><p>Requires declaration of boolean useState variable for isMenuVisible prop.</p></li>
+<li><p>Requires declaration of method to change state of isMenuVisible prop.</p></li>
+</ul>
+</section>
+<section id="sidemenu-js">
+<h3>SideMenu.js<a class="headerlink" href="#sidemenu-js" title="Link to this heading">¶</a></h3>
+<p>Returns a side menu component. Creates a toggleable menu on the left of the page with links to other pages.</p>
+<p>MUST be used alongside Header component</p>
+<p>Takes (isMenuVisible : useState), (menuLinks : String[]), and (menuNames : String[]) props.</p>
+<ul class="simple">
+<li><p>Requires declaration of boolean useState variable for isMenuVisile prop.</p></li>
+<li><p>Requires declaration of parallel lists (menuLinks and menuNames), where each link is the same index as the name of the link. Will create a button with the    menuNames text that redirects to corresponding menuLinks link</p></li>
+</ul>
+</section>
+<section id="listing-js">
+<h3>Listing.js<a class="headerlink" href="#listing-js" title="Link to this heading">¶</a></h3>
+<p>Returns a listing div. Creates a section to display a listing image and for decision buttons.</p>
+<p>Currently only pulls from locally stored images, in future it should pull from back-end server.</p>
+</blockquote></blockquote></section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rockr</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Jadyn Falls, Jacob Stein, Luka Ratiani, Patrick McCoy.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/featuredocumentation.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,8 +1,11 @@
 # Installation
+---
 
 ## Required Tools
 - Node.js
-- Node Package Manager (npm)
+
+## Required Tools
+- Node.js
 - Express
 
 ## Installation Steps
@@ -10,4 +13,4 @@
 2. Ensure Node.js and Express are installed
 3. cd into /client
 4. Run `npm i`
-5. Run `npm run start`
+5. Everything should be ready to run, see [Usage](usage.md)
