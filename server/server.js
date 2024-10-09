@@ -1,8 +1,8 @@
-import loginQuery from './functions/loginQuery';
-import createAcctQuery from './functions/createAcctQuery';
-
 const express = require('express');
 const cors = require('cors');
+
+const loginQuery = require("./functions/loginQuery.js");
+const createAcctQuery = require("./functions/createAcctQuery.js");
 
 const app = express();
 

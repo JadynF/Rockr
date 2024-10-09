@@ -1,4 +1,4 @@
-export default function loginQuery(object){
+function loginQuery(object){
     let uNameInput = object.username;
 
     queryStr = "SELECT password FROM <table_name> WHERE username=" + uNameInput;

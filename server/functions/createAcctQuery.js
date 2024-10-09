@@ -1,4 +1,4 @@
-export default function createAcctQuery(object){
+function createAcctQuery(object){
     let fNameIn = object.firstName;
     let lNameIn = object.lastName;
     let uNameIn = object.username;
