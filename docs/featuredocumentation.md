@@ -4,6 +4,37 @@
 
 # React App Client
 ---
+## Pages
+<blockquote>
+
+
+### Login.js
+The Login Page. Displayed upon webpage startup.
+
+Displays the webpage name, username input, password input, and a link to the 'Create Account' page.
+
+Login Inputs:
+User can input their personal username and password to gain access to the main site.
+- Successful Login: Redirected to Home Page
+- Unsuccessful Login: Remains on Login Page
+
+### CreateAccount.js
+The Create Account Page. Can be accessed via the Login page.
+
+Displays input boxes for a user's first name, last name, username, password, email, and phone number, as well as a 'Submit' button and a link to the Login Page.
+
+Create Account Inputs:
+User can input their personal information and submit it.
+- Successful Submission: The user's account is added and saved to the database, and the user can then log in on future webpage visits.
+- Unsuccessful Submission: The user's account is not created.
+
+### Home.js
+The Home Page. Can be accessed via a successful login on the Login Page.
+
+Displays a 'listing' for the user to 'swipe' "Yes!" or "No!" on, which contains an image of a chair.
+Contains a side menu which is accessed via a 'Show Menu' button in the top-left of the page.
+Contains a header which displays the name of the webpage.
+</blockquote>
 
 ## Components
 <blockquote>
