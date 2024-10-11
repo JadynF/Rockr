@@ -3,9 +3,6 @@
 
 ## Required Tools
 - Node.js
-
-## Required Tools
-- Node.js
 - Express
 
 ## Installation Steps
