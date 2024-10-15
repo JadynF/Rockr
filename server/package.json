@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
@@ -20,6 +21,9 @@
     "mysql2": "^3.11.3",
     "nodemailer": "^6.9.15",
     "pg": "^8.13.0",
+=======
+    "express": "^4.21.0",
+>>>>>>> 9a6ced74206cbcb7965b59fb94d811d7006c73ee
     "server": "file:"
   },
   "devDependencies": {
