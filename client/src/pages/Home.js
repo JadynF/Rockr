@@ -1,8 +1,27 @@
 import React, {useState, useEffect} from "react";
+import Header from '../components/Header';
+import SideMenu from '../components/SideMenu';
+import Listing from '../components/Listing';
 import CustomNavLink from "../components/CustomNavLink";
+import '../styles/Home.css';
 
 export default function Home() {
+    const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMenuVisible(prev => !prev);
+    }
+
+    const menuNames = ["Profile", "Chat", "My Listings", "Settings"];
+    const menuLinks = ["/Profile", "/Chat", "/Listings", "/Settings"];
+
     return (
-        <h1>Welcome to the Home Page!</h1>
+        <>
+            <Header isMenuVisible = {isMenuVisible} toggleMenu = {toggleMenu}/>
+            <div className = 'main-container'>
+                <SideMenu isMenuVisible = {isMenuVisible} menuNames = {menuNames} menuLinks = {menuLinks}/>
+                <Listing/>
+            </div>
+        </>
     )
 }

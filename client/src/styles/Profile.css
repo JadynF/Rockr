@@ -1,0 +1,58 @@
+.header {
+    width: 100%;
+    text-align: center;
+    left:35%;
+}
+
+.user-info-box {
+    display: static;
+    width: 400px;
+    height: 200px;
+    border: 10px slateblue;
+    background-color: slategray;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 2px;
+    border-radius: 50px;
+    color: white;
+    position:fixed;
+    top: 20%;
+    left: 35%;
+}
+
+.location-link-box {
+    display: static;
+    width: 400px;
+    height: 50px;
+    border: 10px slateblue;
+    background-color: slategray;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 2px;
+    border-radius: 50px;
+    color: white;
+    position:fixed;
+    top:55%;
+    left:35%;
+    align-content: center;
+}
+.location-link-box:hover {
+    background-color: black;
+}
+
+.listing-link-box {
+    display: static;
+    width: 400px;
+    height: 50px;
+    border: 10px slateblue;
+    background-color: slategray;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 2px;
+    border-radius: 50px;
+    color: white;
+    position:fixed;
+    top:70%;
+    left:35%;
+    align-content: center;
+}
