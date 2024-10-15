@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
 
 const loginQuery = require("./functions/loginQuery.js");
