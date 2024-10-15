@@ -1,27 +1,39 @@
-import React, { useState } from 'react';
-import img1 from '../assets/chair1.webp';
-import img2 from '../assets/chair2.webp';
-import img3 from '../assets/chair3.webp';
-import img4 from '../assets/chair4.jpg';
-import img5 from '../assets/chair5.webp';
+import React, { useEffect, useState } from 'react';
+import {Authorization} from '../components/Authorization';
 
 function Listing() {
-    const images = [img1, img2, img3, img4, img5];
     const [imageIndex, setImageIndex] = useState(0); // default image is first index
-    const [shownImage, setShownImage] = useState(images[imageIndex]);
+    const [shownImage, setShownImage] = useState('');
+
+    useEffect(() => {
+        Authorization();
+        console.log(imageIndex);
+        const imageQuery = {
+            imageIndex: imageIndex
+        };
+        fetch('http://localhost:8000/GetListing', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(imageQuery),
+        })
+        .then(res => res.json())
+        .then(data => setShownImage(data['imagePath']));//data => setShownImage(data['imagePath']));
+        
+    }, [imageIndex]);
 
 
-    const handleShownImage = (event) => {
+    const handleShownImage = () => {
 
         // handle web server requests here when available
         // possibly keep a queue of listings, when reach end of queue send request for more
 
-        if (imageIndex >= images.length - 1)
+        if (imageIndex >= 4)
             setImageIndex(0);
         else
             setImageIndex(imageIndex + 1);
-        
-        setShownImage(images[imageIndex]);
+
     }
 
     return (

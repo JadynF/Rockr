@@ -6,7 +6,6 @@ export default function Login() {
     const [uNameInput, setUName] = useState("");
     const [passInput, setPassword] = useState("");
     //Variable for value returned from the backend
-    const [mydata, setData] = useState("Nothing from the server...");
     const [loginMessage, setLoginMessage] = useState("");
 
     //handle changes to username and password input
@@ -32,15 +31,17 @@ export default function Login() {
             body: JSON.stringify(loginQuery), //sent as a JSON string
             })
             .then(res => res.json())
-            .then(data => setData(data.response))
+            .then(data => {
+                if (data.response == "accepted") {
+                    setLoginMessage("login accepted. Going to home...");
+                    localStorage.setItem('token', data.token);
+                    window.location.pathname = "/Home";
+                }
+                else {
+                    setLoginMessage("Login rejected. Please enter valid credentials...");
+                }
+            })
             .catch(error => console.error(error));
-        //if credentials are accepted, send user to home page, else, they must reenter credentials.
-        if(mydata == "accepted"){
-            setLoginMessage("Login accepted. Going to home...");
-            window.location.pathname = "/Home"; //sends user to home page
-        } else {
-            setLoginMessage("Login rejected. Please enter valid credentials...");
-        }
     }
 
     return (
