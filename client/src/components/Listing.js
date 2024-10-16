@@ -11,7 +11,7 @@ function Listing() {
         const imageQuery = {
             imageIndex: imageIndex
         };
-        fetch('http://localhost:8000/GetListing', {
+        fetch('http://localhost:8000/getListing', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
