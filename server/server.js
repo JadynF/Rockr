@@ -75,7 +75,7 @@ app.post('/AcctCreation', (req, res) => {
 });
 
 
-app.post('/GetListing', (req, res) => {
+app.post('/getListing', (req, res) => {
   let body = req.body;
 
   // ideally, sends a query to database and returns path of image, with listing information
