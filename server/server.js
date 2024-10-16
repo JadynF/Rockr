@@ -1,15 +1,47 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const app = express();
+const mysql = require('mysql2');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const path = require('path');
 
+const app = express();
+
 const TIMEOUT = 1; // in minutes
+const loginQuery = require("./functions/loginQuery.js");
+const createAcctQuery = require("./functions/createAcctQuery.js");
 let userTokenMap = new Map(); // {username: [token, loginTime]}
+
 const imagePaths = ['/chairImages/chair1.webp', '/chairImages/chair2.webp', '/chairImages/chair3.webp', '/chairImages/chair4.jpg', '/chairImages/chair5.webp'];
 
 app.use(cors());
 app.use(express.json());
+
+// Create a MySQL connection pool
+const pool = mysql.createPool({
+  host: 'database-host',
+  user: 'doadmin',
+  database: 'defaultdb',
+  port: 25060
+});
+
+// Test the database connection
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error('Error connecting to database:', err);
+    return;
+  }
+  console.log('Connected to database!');
+  connection.release();
+});
+
+pool.query('SELECT * FROM User_information', (err, results, fields) => {
+  if (err) {
+    console.error('Error: ', err);
+  }
+  console.log(fields);
+});
 
 // response contains "response", and if accepted "token"
 app.post('/login', (req, res) => {
@@ -34,6 +66,21 @@ app.post('/login', (req, res) => {
   }
 });
 
+// returns "response" and "user", "user" is false if not authorized
+app.post('/isAuthorized', (req, res) => {
+  const body = req.body;
+  const currToken = body.token;
+  let response = false;
+  const user = isAuthorized(currToken);
+  if (user) {
+    response = true;
+    console.log("Confirmed auth for: " + user);
+  }
+  else
+    console.log("Auth for token failed");
+  return res.send(JSON.stringify({response: response, user: user}));
+});
+
 // returns username if authorized, returns false if not
 function isAuthorized(currToken) {
   for (const user of userTokenMap.keys()) {
@@ -43,6 +90,7 @@ function isAuthorized(currToken) {
       if (elapsedMinutes <= TIMEOUT)
         return user;
       else {
+        console.log("User: " + user + " timed out");
         userTokenMap.delete(user);
         return false;
       }
@@ -50,17 +98,6 @@ function isAuthorized(currToken) {
   }
   return false;
 }
-
-// returns "response" and "user", "user" is false if not authorized
-app.post('/isAuthorized', (req, res) => {
-  const body = req.body;
-  const currToken = body.token;
-  let response = false;
-  const user = isAuthorized(currToken);
-  if (user)
-    response = true;
-  return res.send(JSON.stringify({response: response, user: user}));
-})
 
 app.post('/AcctCreation', (req, res) => {
     /*
