@@ -20,9 +20,9 @@ app.use(express.json());
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-  host: 'rockrdatabase-do-user-18048731-0.g.db.ondigitalocean.com',
-  user: 'doadmin',
-  password: 'AVNS_Qd4pwVZ6xO7LWrZRrRp',
+  host: '',
+  user: '',
+  password: '',
   database: 'defaultdb',
   port: 25060
 });
@@ -128,7 +128,7 @@ app.post('/AcctCreation', (req, res) => {
 app.post('/getListing', (req, res) => {
   let body = req.body;
 
-  
+
   // ideally, sends a query to database and returns path of image, with listing information
   // instead, this server keeps list of imagePaths and sends from those
   const imageIndex = body.imageIndex;
