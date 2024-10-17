@@ -15,8 +15,8 @@ export default function Chat() {
         setIsMenuVisible(prev => !prev);
     }
 
-    const menuNames = ['Profile', 'Chat', 'My Listings', 'Settings'];
-    const menuLinks = ['/Profile', '/Chat', '/MyListings', '/Settings'];
+    const menuNames = ['Home', 'Profile', 'My Listings', 'Settings'];
+    const menuLinks = ['/Home', '/Profile', '/MyListings', '/Settings'];
 
     return (
         <>

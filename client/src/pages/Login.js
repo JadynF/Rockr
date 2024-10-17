@@ -5,6 +5,7 @@ export default function Login() {
     //Variables for user input
     const [uNameInput, setUName] = useState("");
     const [passInput, setPassword] = useState("");
+    
     //Variable for value returned from the backend
     const [loginMessage, setLoginMessage] = useState("");
 

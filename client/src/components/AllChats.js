@@ -21,7 +21,7 @@ function AllChats() {
         },
         body: JSON.stringify(body),
     })
-    .then()
+    .then();// set useState variables)
 
     return (
         <div className = 'all-chats'>

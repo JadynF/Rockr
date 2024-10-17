@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import {Authorization} from '../components/Authorization';
 
 function Listing() {
-    const [imageIndex, setImageIndex] = useState(0); // default image is first index
-    const [shownImage, setShownImage] = useState('');
+    const [pageUpdater, setPageUpdater] = useState(true); // useEffect runs when pageUpdater changes value, listen (it works)
+    const [shownImage, setShownImage] = useState([]);
+
 
     useEffect(() => {
         Authorization();
-        console.log(imageIndex);
         const imageQuery = {
-            imageIndex: imageIndex
+            token: localStorage.getItem('token'),
+            currListing: shownImage[1],
         };
         fetch('http://localhost:8000/getListing', {
             method: 'POST',
@@ -19,31 +20,30 @@ function Listing() {
             body: JSON.stringify(imageQuery),
         })
         .then(res => res.json())
-        .then(data => setShownImage(data['imagePath']));//data => setShownImage(data['imagePath']));
+        .then(data => {
+            setShownImage([data['imagePath'], data['listingId']])
+
+        });//data => setShownImage(data['imagePath']));
         
-    }, [imageIndex]);
+    }, [pageUpdater]);
 
+    const imageYes = async () => {
+        setPageUpdater(!pageUpdater);
+        // send query to add to matched listings
+    }
 
-    const handleShownImage = () => {
-
-        // handle web server requests here when available
-        // possibly keep a queue of listings, when reach end of queue send request for more
-
-        if (imageIndex >= 4)
-            setImageIndex(0);
-        else
-            setImageIndex(imageIndex + 1);
-
+    const imageNo = async () => {
+        setPageUpdater(!pageUpdater);
     }
 
     return (
         <div className = 'listing-section'>
             <div className = 'listing-image'>
-                <img src = {shownImage}></img>
+                <img src = {shownImage[0]}></img>
             </div>
             <div className = 'listing-btns'>
-                <h2 onClick = {handleShownImage}>NO!</h2>
-                <h2 onClick = {handleShownImage}>YES!</h2>
+                <h2 onClick = {imageNo}>NO!</h2>
+                <h2 onClick = {imageYes}>YES!</h2>
             </div>
         </div>
     );

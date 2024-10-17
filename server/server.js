@@ -20,7 +20,11 @@ app.use(express.json());
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-
+  host: 'rockrdatabase-do-user-18048731-0.g.db.ondigitalocean.com',
+  user: 'doadmin',
+  password: 'AVNS_Qd4pwVZ6xO7LWrZRrRp',
+  database: 'defaultdb',
+  port: 25060
 });
 
 // Test the database connection
@@ -46,12 +50,10 @@ app.post('/login', async (req, res) => {
 
   // send query to see if user/password combo exists
   const query = "SELECT password FROM User_information WHERE username='" + body.username + "'";
-  console.log(query);
   let realPassword = "";
   try {
-    const queryResponse = await pool.query(query);
+    let queryResponse = await sendQuery(query);
     realPassword = queryResponse[0][0].password;
-    console.log(realPassword);
   }
   catch (error) {
     console.log(error);
@@ -99,7 +101,7 @@ function isAuthorized(currToken) {
       if (elapsedMinutes <= TIMEOUT)
         return user;
       else {
-        console.log("User: " + user + " timed out");
+        console.log(user + " timed out");
         userTokenMap.delete(user);
         return false;
       }
@@ -120,16 +122,50 @@ app.post('/AcctCreation', (req, res) => {
     return res.send(JSON.stringify(req.body));
 });
 
+async function sendQuery(query) {
+  try {
+    const queryResponse = await pool.query(query);
+    return queryResponse;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
 
-app.post('/getListing', (req, res) => {
+
+app.post('/getListing', async (req, res) => {
   let body = req.body;
+  const userToken = body.token;
+  const currListing = body.currListing;
+  let username = isAuthorized(userToken);
+  if (!username)
+    return;
+  console.log("User " + username + " requesting listing");
 
+  try {
+    // used to query database to get listing
+    let query = "SELECT listingId, imagePath FROM Listings WHERE listingId NOT IN ( SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.username = '" + username + "' AND S.userId = U.id) LIMIT 1;";
+    let listingId = ""
+    let imagePath = ""
+    let queryResponse = await sendQuery(query);
+    if (queryResponse[0].length == 0)
+      return res.send(JSON.stringify({imagePath: "AllOut.jpeg", listingId: null}));
+    listingId = queryResponse[0][0].listingId;
+    imagePath = queryResponse[0][0].imagePath;
 
-  // ideally, sends a query to database and returns path of image, with listing information
-  // instead, this server keeps list of imagePaths and sends from those
-  const imageIndex = body.imageIndex;
-  let responsePath = imagePaths[imageIndex];
-  return res.send(JSON.stringify({imagePath: responsePath}));
+    query = "SELECT id FROM User_information WHERE username = '" + username + "';";
+    let userId = "";
+    queryResponse = await sendQuery(query);
+    userId = queryResponse[0][0].id;
+    query = "INSERT INTO Seen_listings VALUES ('" + listingId + "', " + userId + ");";
+    sendQuery(query);
+
+    let responsePath = imagePath + ".jpeg";
+    return res.send(JSON.stringify({imagePath: responsePath, listingId: listingId}));
+  } 
+  catch (error) {
+    console.log(error);
+  }
 });
 
 app.use('/static', express.static(__dirname + '/static'));
