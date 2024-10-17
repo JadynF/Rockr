@@ -20,11 +20,7 @@ app.use(express.json());
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-  host: 'rockrdatabase-do-user-18048731-0.g.db.ondigitalocean.com',
-  user: 'doadmin',
-  password: 'AVNS_Qd4pwVZ6xO7LWrZRrRp',
-  database: 'defaultdb',
-  port: 25060
+
 });
 
 // Test the database connection
