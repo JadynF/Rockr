@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
@@ -20,8 +20,9 @@ app.use(express.json());
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-  host: 'database-host',
+  host: 'rockrdatabase-do-user-18048731-0.g.db.ondigitalocean.com',
   user: 'doadmin',
+  password: 'AVNS_Qd4pwVZ6xO7LWrZRrRp',
   database: 'defaultdb',
   port: 25060
 });
@@ -36,18 +37,33 @@ pool.getConnection((err, connection) => {
   connection.release();
 });
 
-pool.query('SELECT * FROM User_information', (err, results, fields) => {
-  if (err) {
-    console.error('Error: ', err);
-  }
-  console.log(fields);
-});
+//pool.query('SELECT * FROM User_information', (err, results, fields) => {
+//  if (err) {
+//    console.error('Error: ', err);
+//  }
+//  console.log(fields);
+//});
 
 // response contains "response", and if accepted "token"
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   let body = req.body;
+
   // send query to see if user/password combo exists
-  if((body.username == "testuser" && body.password == "password") || (body.username == 'testuser2' && body.password == 'password2')){
+  const query = "SELECT password FROM User_information WHERE username='" + body.username + "'";
+  console.log(query);
+  let realPassword = "";
+  try {
+    const queryResponse = await pool.query(query);
+    realPassword = queryResponse[0][0].password;
+    console.log(realPassword);
+  }
+  catch (error) {
+    console.log(error);
+  }
+
+  if (realPassword == "" || body.password != realPassword)
+    return res.send(JSON.stringify({response: "rejected"}));
+  else if(body.password == realPassword){
     let responseToken = '';
     let hasToken = userTokenMap.has(body.username);
 
@@ -60,9 +76,6 @@ app.post('/login', (req, res) => {
     }
 
     return res.send(JSON.stringify({response: "accepted", token: responseToken}));
-  }
-  else{
-    return res.send(JSON.stringify({response: "rejected"}));
   }
 });
 
@@ -115,6 +128,7 @@ app.post('/AcctCreation', (req, res) => {
 app.post('/getListing', (req, res) => {
   let body = req.body;
 
+  
   // ideally, sends a query to database and returns path of image, with listing information
   // instead, this server keeps list of imagePaths and sends from those
   const imageIndex = body.imageIndex;

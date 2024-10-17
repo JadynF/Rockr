@@ -6,13 +6,12 @@ import {Authorization} from '../components/Authorization';
 import '../styles/Home.css';
 
 export default function Home() {
+    Authorization();
     const [isMenuVisible, setIsMenuVisible] = useState(false);
 
     const toggleMenu = () => {
         setIsMenuVisible(prev => !prev);
     }
-
-    Authorization();
 
     const menuNames = ["Profile", "Chat", "My Listings", "Settings"];
     const menuLinks = ["/Profile", "/Chat", "/MyListings", "/Settings"];
