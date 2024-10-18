@@ -43,7 +43,7 @@ export default function CreateAccount() {
             email: emailInput,
             phoneNum: phoneNumInput
         };
-        fetch('http://localhost:8000/AcctCreation', {
+        fetch('http://localhost:8000/Register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

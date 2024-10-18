@@ -54,7 +54,7 @@
 }
 /*orig background: rgb(70, 93, 110)*/
 .listing-section {
-    background-color: rgb(231, 233, 234);
+    background-color: rgb(195, 197, 199);
     height: 100%;
     padding: 0px;
     border: 0px;
@@ -84,5 +84,5 @@ body, html {
     margin: 0px;
     padding: 0px;
     border: 0px;
-    background-color: rgb(27, 36, 43);
+    background-color: rgb(195, 197, 199);
 }
