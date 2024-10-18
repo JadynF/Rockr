@@ -17,9 +17,9 @@ export const Authorization = async () => {
             const isAuthorized = data.response;
             console.log(isAuthorized);
             if (!isAuthorized)
-                window.location.pathname = '/Login';
+                window.location.href = window.location.origin + '/Login';
         });
     }
     else
-        window.location.pathname = '/Login';
+        window.location.href = window.location.orgin + '/Login';
 }

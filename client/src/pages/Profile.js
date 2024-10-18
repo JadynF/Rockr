@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import CustomNavLink from "../components/CustomNavLink";
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import SideMenu from '../components/SideMenu';
 import {Authorization} from '../components/Authorization';
@@ -54,7 +54,7 @@ export default function Profile() {
                 </div>
                 <button className="location-link-box">Location: {location}</button>
                 <div className="listing-link-box">
-                <CustomNavLink href="/Listings">My Listings</CustomNavLink>
+                <Link to="/Listings">My Listings</Link>
                 </div>
             </div>
         </div>

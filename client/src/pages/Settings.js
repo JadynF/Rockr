@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from "react";
-import CustomNavLink from "../components/CustomNavLink";
+import { Link } from 'react-router-dom';
 import {Authorization} from '../components/Authorization';
 import "../styles/Home.css";
 
@@ -10,7 +9,7 @@ export default function Settings() {
         <div>
             <h1 className="header">Welcome to the Settings Page!</h1>
             <div className="body">
-                <CustomNavLink href="/Home">Home</CustomNavLink>
+                <Link to="/Home">Home</Link>
             </div>
         </div>
     )

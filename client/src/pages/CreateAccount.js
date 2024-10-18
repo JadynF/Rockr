@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react";
-import CustomNavLink from "../components/CustomNavLink";
+import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 
 export default function CreateAccount() {
     //account creation variables
@@ -59,7 +59,7 @@ export default function CreateAccount() {
         <div>
             <div>
                 <h1>Welcome to the CreateAccount Page!</h1>
-                <CustomNavLink href="/Login">Login Page</CustomNavLink>
+                <Link to="/Login">Login Page</Link>
             </div>
             <div>
                 <h2>Create an Account!</h2>

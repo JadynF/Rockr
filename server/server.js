@@ -164,7 +164,35 @@ app.post('/getListing', async (req, res) => {
   }
 });
 
-app.use('/static', express.static(__dirname + '/static'));
+app.post('/matchedListing', async (req, res) => {
+  console.log("Attempting to push match");
+  let body = req.body;
+  const userToken = body.token;
+  const currListing = body.currListing;
+  let username = isAuthorized(userToken);
+  if (!username)
+    return;
+
+  console.log("Sending query");
+  try {
+    let query = "SELECT id FROM User_information WHERE username = '" + username + "';"
+    let userId = "";
+    queryResponse = await sendQuery(query);
+    userId = queryResponse[0][0].id;
+    
+    query = "INSERT INTO MatchedWith VALUES (" + userId + ", '" + currListing + "');";
+    sendQuery(query);
+  }
+  catch (error) {
+    console.log(error);
+  }
+});
+
+//app.use(express.static(path.join(__dirname, 'build')));
+//
+//app.get('*', (req, res) => {
+//  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+//});
 
 app.listen(8000, () => {
     console.log(`Server is running on port 8000.`);

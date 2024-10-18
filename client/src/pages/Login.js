@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
-import CustomNavLink from "../components/CustomNavLink";
-
+import React, {useState} from "react";
+import { Link, useNavigate } from 'react-router-dom';
 export default function Login() {
     //Variables for user input
     const [uNameInput, setUName] = useState("");
@@ -16,6 +15,8 @@ export default function Login() {
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     }
+
+    const navigate = useNavigate();
     //function to login. When 'Log In' button is pressed, the inputs are sent to the backend. 
     //If the login info matches a user in the database, the user will be sent to the home page.
     const submitLogin = (event) => {
@@ -36,7 +37,7 @@ export default function Login() {
                 if (data.response == "accepted") {
                     setLoginMessage("login accepted. Going to home...");
                     localStorage.setItem('token', data.token);
-                    window.location.pathname = "/Home";
+                    navigate("/Home");
                 }
                 else {
                     setLoginMessage("Login rejected. Please enter valid credentials...");
@@ -49,7 +50,7 @@ export default function Login() {
         <div>
             <h1>Welcome to the Login Page!</h1>
             <p>Need an account?</p>
-            <CustomNavLink href="/CreateAccount">Create Account</CustomNavLink>
+            <Link to="/CreateAccount">Create Account</Link>
             <div>
                 <input type="text" id="userInputText" name="userInputText" placeholder="Username" onChange={handleUsernameChange} />
                 <input type="text" id="passInputText" name="passInputText" placeholder="Password" onChange={handlePasswordChange} />

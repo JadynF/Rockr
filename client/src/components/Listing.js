@@ -23,13 +23,26 @@ function Listing() {
         .then(data => {
             setShownImage([data['imagePath'], data['listingId']])
 
-        });//data => setShownImage(data['imagePath']));
+        });
         
     }, [pageUpdater]);
 
     const imageYes = async () => {
         setPageUpdater(!pageUpdater);
-        // send query to add to matched listings
+
+        // add listing to matched
+        const matchPayload = {
+            token: localStorage.getItem('token'),
+            currListing: shownImage[1]
+        };
+        fetch('http://localhost:8000/matchedListing', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(matchPayload),
+        });
+        console.log("Send matched query");
     }
 
     const imageNo = async () => {

@@ -1,8 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, { useState } from "react";
 import Header from '../components/Header';
 import SideMenu from '../components/SideMenu';
 import AllChats from '../components/AllChats.js';
-import CustomNavLink from "../components/CustomNavLink";
 import {Authorization} from '../components/Authorization';
 import "../styles/Chat.css";
 
@@ -16,7 +15,7 @@ export default function Chat() {
     }
 
     const menuNames = ['Home', 'Profile', 'My Listings', 'Settings'];
-    const menuLinks = ['/Home', '/Profile', '/MyListings', '/Settings'];
+    const menuLinks = ['/Home', '/Profile', '/Listings', '/Settings'];
 
     return (
         <>

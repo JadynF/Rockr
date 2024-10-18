@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import Header from '../components/Header';
 import SideMenu from '../components/SideMenu';
 import Listing from '../components/Listing';
 import {Authorization} from '../components/Authorization';
+
 import '../styles/Home.css';
 
 export default function Home() {
     Authorization();
+
     const [isMenuVisible, setIsMenuVisible] = useState(false);
 
     const toggleMenu = () => {
@@ -14,7 +16,7 @@ export default function Home() {
     }
 
     const menuNames = ["Profile", "Chat", "My Listings", "Settings"];
-    const menuLinks = ["/Profile", "/Chat", "/MyListings", "/Settings"];
+    const menuLinks = ["/Profile", "/Chat", "/Listings", "/Settings"];
 
     return (
         <>

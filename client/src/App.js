@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from "./pages/Login.js";
 import CreateAccount from "./pages/CreateAccount.js";
 import Home from "./pages/Home.js";
@@ -10,39 +11,21 @@ import "./App.css";
 
 function App() {
 
-  //takes current window path and grabs matching webpage
-  let Webpage = Login;
-  switch (window.location.pathname) {
-    case "/Login":
-      Webpage = Login;
-      break;
-    case "/CreateAccount":
-      Webpage = CreateAccount;
-      break;
-    case "/Home":
-      Webpage = Home;
-      break;
-    case "/Profile":
-      Webpage = Profile;
-      break;
-    case "/Chat":
-      Webpage = Chat;
-      break;
-    case "/Listings":
-      Webpage = Listings;
-      break;
-    case "/Settings":
-      Webpage = Settings;
-      break;
-    default:
-      Webpage = Login;
-      break;
-  }
-
   return (
-    <div className="App">
-      <Webpage />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element= {<Navigate to="/Login" replace />} />
+          <Route path="/Login" element= {<Login/>} />
+          <Route path="/CreateAccount" element= {<CreateAccount/>} />
+          <Route path="/Home" element= {<Home/>} />
+          <Route path="/Profile" element= {<Profile/>} />
+          <Route path="/Chat" element= {<Chat/>} />
+          <Route path="/Settings" element= {<Settings/>} />
+          <Route path="/Listings" element= {<Listings/>} />
+        </Routes>
+      </div>  
+    </Router>
   );
 }
 
