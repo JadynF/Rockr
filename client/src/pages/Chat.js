@@ -23,7 +23,6 @@ export default function Chat() {
             <div className="main-container">
                 <SideMenu isMenuVisible = {isMenuVisible} menuNames = {menuNames} menuLinks = {menuLinks}/>
                 <div className = 'main-area'>
-                    <h2>Chat Page</h2>
                     <div className = 'all-chat-area'>
                         <AllChats/>
                     </div>

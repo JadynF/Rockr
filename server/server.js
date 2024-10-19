@@ -2,13 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const path = require('path');
 
 const app = express();
 
-const TIMEOUT = 1; // in minutes
+const TIMEOUT = 15; // in minutes
 const loginQuery = require("./functions/loginQuery.js");
 const createAcctQuery = require("./functions/createAcctQuery.js");
 let userTokenMap = new Map(); // {username: [token, loginTime]}
@@ -177,7 +175,7 @@ app.post('/matchedListing', async (req, res) => {
   try {
     let query = "SELECT id FROM User_information WHERE username = '" + username + "';"
     let userId = "";
-    queryResponse = await sendQuery(query);
+    let queryResponse = await sendQuery(query);
     userId = queryResponse[0][0].id;
     
     query = "INSERT INTO MatchedWith VALUES (" + userId + ", '" + currListing + "');";
@@ -187,6 +185,32 @@ app.post('/matchedListing', async (req, res) => {
     console.log(error);
   }
 });
+
+app.post("/getChatOverviews", async (req, res) => {
+  let body = req.body
+  const userToken = body.token
+  let username = isAuthorized(userToken);
+  if (!username) 
+    return;
+
+  try {
+    let query = "SELECT L.listingId, L.listingName, U.username FROM Listings L, User_information U WHERE (L.listingId in (SELECT listingId FROM MatchedWith WHERE userId = (SELECT id FROM User_information WHERE username = '" + username + "'))) AND (U.id = L.creatorId);";
+    let queryResponse = await sendQuery(query);
+    let outgoingChatListings = queryResponse[0];
+
+    query = "SELECT L.listingId, L.listingName, U.username FROM Listings L, User_information U WHERE (L.creatorId = (SELECT id FROM User_information WHERE username = '" + username + "')) AND (U.id IN (SELECT userId FROM MatchedWith WHERE listingId = L.listingId));"
+    queryResponse = await sendQuery(query);
+    let incomingChatListings = queryResponse[0];
+
+    let allChats = [outgoingChatListings, incomingChatListings];
+
+    console.log(allChats);
+    return res.send(JSON.stringify(allChats));
+  }
+  catch (error) {
+    console.log(error);
+  }
+})
 
 //app.use(express.static(path.join(__dirname, 'build')));
 //
