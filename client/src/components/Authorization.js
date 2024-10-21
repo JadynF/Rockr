@@ -4,7 +4,6 @@ export const Authorization = async () => {
         const auth = {
             token: myToken
         };
-        console.log("Fetching auth");
         fetch('http://localhost:8000/isAuthorized', {
             method: 'POST',
             headers: {
@@ -15,7 +14,6 @@ export const Authorization = async () => {
         .then(res => res.json())
         .then(data => {
             const isAuthorized = data.response;
-            console.log(isAuthorized);
             if (!isAuthorized)
                 window.location.href = window.location.origin + '/Login';
         });

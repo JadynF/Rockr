@@ -5,9 +5,9 @@ function Listing() {
     const [pageUpdater, setPageUpdater] = useState(true); // useEffect runs when pageUpdater changes value, listen (it works)
     const [shownImage, setShownImage] = useState([]);
 
-
     useEffect(() => {
         Authorization();
+
         const imageQuery = {
             token: localStorage.getItem('token'),
             currListing: shownImage[1],
@@ -21,16 +21,13 @@ function Listing() {
         })
         .then(res => res.json())
         .then(data => {
-            setShownImage([data['imagePath'], data['listingId']])
-
+            setShownImage([data['imagePath'], data['listingId'], data['creatorUsername']])
         });
-        
     }, [pageUpdater]);
 
     const imageYes = async () => {
-        setPageUpdater(!pageUpdater);
+        window.location.reload(); // PAGE BREAKS WITHOUT THIS
 
-        // add listing to matched
         const matchPayload = {
             token: localStorage.getItem('token'),
             currListing: shownImage[1]
@@ -42,7 +39,6 @@ function Listing() {
             },
             body: JSON.stringify(matchPayload),
         });
-        console.log("Send matched query");
     }
 
     const imageNo = async () => {

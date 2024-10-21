@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import SideMenu from '../components/SideMenu';
 import AllChats from '../components/AllChats.js';
@@ -14,6 +15,8 @@ export default function Chat() {
         setIsMenuVisible(prev => !prev);
     }
 
+    const navigate = useNavigate();
+
     const menuNames = ['Home', 'Profile', 'My Listings', 'Settings'];
     const menuLinks = ['/Home', '/Profile', '/Listings', '/Settings'];
 
@@ -24,7 +27,7 @@ export default function Chat() {
                 <SideMenu isMenuVisible = {isMenuVisible} menuNames = {menuNames} menuLinks = {menuLinks}/>
                 <div className = 'main-area'>
                     <div className = 'all-chat-area'>
-                        <AllChats/>
+                        <AllChats navigate = {navigate}/>
                     </div>
                 </div>
             </div>

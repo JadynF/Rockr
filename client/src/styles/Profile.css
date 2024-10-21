@@ -37,6 +37,7 @@
     background-color: rgb(48, 64, 76);
     color: white;
     text-align: left;
+    height: 100vh;
 }
 
 .hidden {

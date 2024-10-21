@@ -1,12 +1,7 @@
 import {Authorization} from './Authorization';
 import React, {useState, useEffect} from 'react';
 
-function AllChats() {
-
-    const [chairNames, setChairNames] = useState(['Scary Chair', 'Awesome Chair', 'Floating Chair']);
-    const [userNames, setUserNames] = useState(['Joseph', 'Mary', 'Bob']);
-    const [lastMessages, setLastMessages] = useState(['Hey I want this chair.', 'Is this chair still available.', "$7500 don't lowball I know what I got"]);
-
+function AllChats({ navigate }) {
     const [outgoingChats, setOutgoingChats] = useState([]);
     const [incomingChats, setIncomingChats] = useState([]);
 
@@ -27,11 +22,14 @@ function AllChats() {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
             setOutgoingChats(data[0]);
             setIncomingChats(data[1]);
         });// set useState variables)
     }, []);
+
+    const goToChat = (userId, listingId) => {
+        navigate(`/IndividualChat/${userId}/${listingId}`);
+    };
 
 
     return (
@@ -39,7 +37,7 @@ function AllChats() {
             <div className = 'outgoing-chats'>
                 <h2>Outgoing Chats</h2>
                 {outgoingChats.map((item, index) => (
-                    <div className = 'individual-chat'>
+                    <div className = 'individual-chat' onClick={() => goToChat(item.username, item.listingId)}>
                         <div className = 'chat-titles'>
                             <h2>{item.listingName}</h2>
                             <h3>{item.username}</h3>
@@ -54,7 +52,7 @@ function AllChats() {
             <div className = 'incoming-chats'>
                 <h2>Incoming Chats</h2>
                 {incomingChats.map((item, index) => (
-                    <div className = 'individual-chat'>
+                    <div className = 'individual-chat' onClick={() => goToChat(item.username, item.listingId)}>
                         <div className = 'chat-titles'>
                             <h2>{item.listingName}</h2>
                             <h3>{item.username}</h3>

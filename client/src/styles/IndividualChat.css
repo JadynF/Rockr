@@ -33,11 +33,11 @@
 
 .sidebar {
     display: flex;
+    height: 100vh;
     flex-direction: column;
     background-color: rgb(48, 64, 76);
     color: white;
     text-align: left;
-    height: 100vh;
 }
 
 .hidden {
@@ -58,42 +58,43 @@
     text-align: center;
 }
 
-.all-chats {
-    background-color: rgb(70, 93, 110);
-    height: 100%;
-    width: auto;
-    flex: 1;
-    color: white;
+.sent-message {
+    background-color: rgb(48, 64, 76);
+    display: flex;
+    margin: 10px;
+    padding: 3px;
+    justify-content: right;
+    align-items: center;
 }
 
-.individual-chat {
-    background-color: rgb(60, 79, 94);
-    height: 10%;
-    width: auto;
-    flex: 1;
+.received-message {
+    background-color: rgb(48, 64, 76);
     display: flex;
-    color: white;
-    margin: 15px;
-    padding: 5px;
+    margin: 10px;
+    padding: 3px;
+    justify-content: left;
+    align-items: center;
+}
+
+.chat-user {
+    padding-right: 8px;
+}
+
+.create-message-div {
+    display: flex;
+    background-color: rgb(58, 69, 76);
+    justify-content: right;
+}
+
+.send-message-btn {
     cursor: pointer;
 }
 
-.chat-titles {
-    padding-left: 50px;
-    width: 20%;
-    text-align: left;
-    flex: 1;
-}
-
-.last-message {
-    width: auto;
-    text-align: right;
-    color: rgb(180, 168, 168);
-    flex: 2;
-}
-
-.last-message h4 {
-    padding-right: 50px;
+.new-message {
+    flex: 3;
+    background-color: rgb(37, 49, 58);
+    color: white;
+    font-size: 18px;
 }
 
 a {

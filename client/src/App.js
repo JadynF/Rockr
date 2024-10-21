@@ -7,6 +7,7 @@ import Profile from "./pages/Profile.js";
 import Chat from "./pages/Chat.js";
 import Settings from "./pages/Settings.js";
 import Listings from "./pages/Listings.js";
+import IndividualChat from "./pages/IndividualChat.js";
 import "./App.css";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/Chat" element= {<Chat/>} />
           <Route path="/Settings" element= {<Settings/>} />
           <Route path="/Listings" element= {<Listings/>} />
+          <Route path="/IndividualChat/:userId/:listingId" element= {<IndividualChat/>} />
         </Routes>
       </div>  
     </Router>

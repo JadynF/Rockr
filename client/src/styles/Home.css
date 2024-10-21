@@ -29,11 +29,13 @@
 
 .main-container {
     display: flex;
+    height: 100vh;
 }
 
 .listing-image img {
     width: 40%;
-    padding: 50px;
+    padding: 25px;
+    height: 75vh;
 }
 
 .sidebar {
@@ -42,6 +44,7 @@
     background-color: rgb(48, 64, 76);
     color: white;
     text-align: left;
+    height: 100vh;
 }
 
 .hidden {
