@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import { Link, useNavigate } from 'react-router-dom';
+
 export default function Login() {
+    const host = process.env.REACT_APP_BACKEND_HOST;
     //Variables for user input
     const [uNameInput, setUName] = useState("");
     const [passInput, setPassword] = useState("");
@@ -20,12 +22,14 @@ export default function Login() {
     //function to login. When 'Log In' button is pressed, the inputs are sent to the backend. 
     //If the login info matches a user in the database, the user will be sent to the home page.
     const submitLogin = (event) => {
+        console.log(host);
         event.preventDefault();
         const loginQuery = {
             username: uNameInput,
             password: passInput
         };
-        fetch('http://localhost:8000/login', {
+        console.log('/login');
+        fetch('/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

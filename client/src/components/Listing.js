@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {Authorization} from '../components/Authorization';
 
 function Listing() {
+    const host = process.env.REACT_APP_BACKEND_HOST;
     const [pageUpdater, setPageUpdater] = useState(true); // useEffect runs when pageUpdater changes value, listen (it works)
     const [shownImage, setShownImage] = useState([]);
 
@@ -12,7 +13,7 @@ function Listing() {
             token: localStorage.getItem('token'),
             currListing: shownImage[1],
         };
-        fetch('http://localhost:8000/getListing', {
+        fetch('/getListing', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,7 +33,7 @@ function Listing() {
             token: localStorage.getItem('token'),
             currListing: shownImage[1]
         };
-        fetch('http://localhost:8000/matchedListing', {
+        fetch('/matchedListing', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

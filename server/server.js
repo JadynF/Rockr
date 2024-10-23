@@ -16,7 +16,11 @@ app.use(express.json());
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-
+  host: 'rockrdatabase-do-user-18048731-0.g.db.ondigitalocean.com',
+  user: 'doadmin',
+  password: 'AVNS_Qd4pwVZ6xO7LWrZRrRp',
+  database: 'defaultdb',
+  port: 25060
 });
 
 // Test the database connection
@@ -136,12 +140,44 @@ app.post('/getListing', async (req, res) => {
   if (!username)
     return;
 
+  let query = "SELECT id FROM User_information WHERE username = '" + username + "';";
+  let userId = "";
+  let queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+  userId = queryResponse[0][0].id;
+
+  query = "SELECT prefPrice, prefColor, prefCondition FROM UserPreferences WHERE userId = " + userId + ";";
+  let userPreferences = [];
+  queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+  userPreferences = queryResponse[0][0];
+
+  let prefPriceStr = "";
+  let prefColorStr = "";
+  let prefConditionStr = "";
+  console.log(userPreferences.prefConditionStr);
+  if (userPreferences.prefPrice)
+    prefPriceStr = " AND L.chairPrice <= " + userPreferences.prefPrice;
+  if (userPreferences.prefColor)
+    prefColorStr = " AND L.chairColor = '" + userPreferences.prefColor + "'";
+  if (userPreferences.prefConditionStr)
+    prefConditionStr = " AND L.chairCondition = '" + userPreferences.prefCondition + "'";
+
+  console.log(prefPriceStr);
+  console.log(prefConditionStr);
+  console.log(prefColorStr);
+
   // used to query database to get listing
-  let query = "SELECT listingId, imagePath, creatorId FROM Listings WHERE listingId NOT IN ( SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.username = '" + username + "' AND S.userId = U.id) LIMIT 1;";
+  query = "SELECT listingId, imagePath, creatorId FROM (SELECT * FROM Listings WHERE listingId NOT IN (SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.id = " + userId + " AND S.userId = U.id)) AS L, (SELECT id FROM User_information WHERE id = " + userId + ") AS U WHERE L.creatorId <> U.id" + prefPriceStr + prefColorStr + prefConditionStr + ";";
+  //query = "SELECT listingId, imagePath, creatorId FROM Listings WHERE listingId NOT IN ( SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.id = " + userId + " AND S.userId = U.id) LIMIT 1;";
   let listingId = ""
   let imagePath = ""
   let creatorId = ""
-  let queryResponse = await sendQuery(query);
+  queryResponse = await sendQuery(query);
   if (!queryResponse) {
     return;
   }
@@ -150,14 +186,6 @@ app.post('/getListing', async (req, res) => {
   listingId = queryResponse[0][0].listingId;
   imagePath = queryResponse[0][0].imagePath;
   creatorId = queryResponse[0][0].creatorId;
-  
-  query = "SELECT id FROM User_information WHERE username = '" + username + "';";
-  let userId = "";
-  queryResponse = await sendQuery(query);
-  if (!queryResponse) {
-    return;
-  }
-  userId = queryResponse[0][0].id;
 
   query = "SELECT username FROM User_information WHERE id = " + creatorId + ";";
   let creatorUsername = "";

@@ -7,16 +7,14 @@
 ## Pages
 <blockquote>
 
+### Chat.js
+The Chat overview page.
 
-### Login.js
-The Login Page. Displayed upon webpage startup.
+Displays all incoming and outgoing chats for a user. Each chat represents a match with a listing, so it is not on a per-user basis, and instead per-match.
+Incoming chats represent matches that have been opened by other users for YOUR listing.
+Outgoing chats represent matches that YOU have actively opened.
 
-Displays the webpage name, username input, password input, and a link to the 'Create Account' page.
-
-Login Inputs:
-User can input their personal username and password to gain access to the main site.
-- Successful Login: Redirected to Home Page
-- Unsuccessful Login: Remains on Login Page
+Requires Authorization
 
 ### CreateAccount.js
 The Create Account Page. Can be accessed via the Login page.
@@ -34,12 +32,54 @@ The Home Page. Can be accessed via a successful login on the Login Page.
 Displays a 'listing' for the user to 'swipe' "Yes!" or "No!" on, which contains an image of a chair.
 Contains a side menu which is accessed via a 'Show Menu' button in the top-left of the page.
 Contains a header which displays the name of the webpage.
+
+Requires Authorization
+
+### IndividualChat.js
+The singular chat page. Can be accessed through Chat.js page.
+
+Contains URL parameters:
+<blockquote>
+
+IndividualChat/{userId}/{listingId}
+Where userId is the other user that the current user is chatting with.
+Where listingId is the id of the listing that the other user created.
+
+</blockquote>
+
+Displays chat messages between 2 users for one match. The 2 users are determined by the user that matched, and the user that created the listing.
+The chat will actively update every 5 seconds to ensure the user is able to see incoming messages without refreshing the page.
+
+updateChat(): Takes no parameters, will request to update chat messages from /getIndividualChat endpoint
+
+sendMessage(): Takes no parameters, will request to insert current message into the database through /sendMessage endpoint
+
+Requires Authorization
+
+### Login.js
+The Login Page. Displayed upon webpage startup.
+
+Displays the webpage name, username input, password input, and a link to the 'Create Account' page.
+
+Login Inputs:
+User can input their personal username and password to gain access to the main site.
+- Successful Login: Redirected to Home Page
+- Unsuccessful Login: Remains on Login Page
+
 </blockquote>
 
 ## Components
 <blockquote>
 
-### Authroization.js
+### AllChats.js
+Returns a div that contains previews of all of the current users chats.
+
+Upon mount, will request to get chat overviews from /getChatOverviews endpoint. The div will then be populated with 2 sections, outgoing-chats and incoming-chats, that show previews for the current user.
+
+Takes (navigate: react-router-dom.useNavigate())
+- Due to the nature of React Hooks, useNavigate() must be defined in the parent component at the top level. In order to use navigation to redirect properly, AllChats.js requires this as a parameter.
+
+### Authorization.js
 Returns nothing. Contains method Authorization() that can be used to check if the current user is authorized.
 
 To protect resources, simply call Authorization() before loading the resource.

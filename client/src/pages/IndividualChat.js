@@ -6,6 +6,7 @@ import { Authorization } from '../components/Authorization';
 import "../styles/IndividualChat.css";
 
 export default function IndividualChat() {
+    const host = process.env.REACT_APP_BACKEND_HOST;
 
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const toggleMenu = () => {
@@ -32,7 +33,7 @@ export default function IndividualChat() {
             userId: userId,
             listingId: listingId
         } 
-        fetch("http://localhost:8000/getIndividualChat", {
+        fetch("/getIndividualChat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -68,7 +69,7 @@ export default function IndividualChat() {
             message: inputMessage,
             listingId: listingId
         }
-        fetch("http://localhost:8000/sendMessage", {
+        fetch("/sendMessage", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 
 export default function CreateAccount() {
+    const host = process.env.REACT_APP_BACKEND_HOST;
     //account creation variables
     const [fNameInput, setFName] = useState("");
     const [lNameInput, setLName] = useState("");
@@ -43,7 +44,7 @@ export default function CreateAccount() {
             email: emailInput,
             phoneNum: phoneNumInput
         };
-        fetch('http://localhost:8000/AcctCreation', {
+        fetch(host + '/AcctCreation', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

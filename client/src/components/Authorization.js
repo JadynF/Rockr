@@ -1,10 +1,11 @@
 export const Authorization = async () => {
+    const host = process.env.REACT_APP_BACKEND_HOST;
     let myToken = localStorage.getItem('token');
     if (myToken) {
         const auth = {
             token: myToken
         };
-        fetch('http://localhost:8000/isAuthorized', {
+        fetch('/isAuthorized', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -2,6 +2,7 @@ import {Authorization} from './Authorization';
 import React, {useState, useEffect} from 'react';
 
 function AllChats({ navigate }) {
+    const host = process.env.REACT_APP_BACKEND_HOST;
     const [outgoingChats, setOutgoingChats] = useState([]);
     const [incomingChats, setIncomingChats] = useState([]);
 
@@ -13,7 +14,7 @@ function AllChats({ navigate }) {
         let body = {
             token: myToken
         }
-        fetch('http://localhost:8000/getChatOverviews', {
+        fetch('/getChatOverviews', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
