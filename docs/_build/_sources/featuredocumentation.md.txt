@@ -30,6 +30,7 @@ User can input their personal information and submit it.
 The Home Page. Can be accessed via a successful login on the Login Page.
 
 Displays a 'listing' for the user to 'swipe' "Yes!" or "No!" on, which contains an image of a chair.
+Will only pull listings that fall into the current user's preferences.
 Contains a side menu which is accessed via a 'Show Menu' button in the top-left of the page.
 Contains a header which displays the name of the webpage.
 
@@ -42,13 +43,14 @@ Contains URL parameters:
 <blockquote>
 
 IndividualChat/{userId}/{listingId}
-Where userId is the other user that the current user is chatting with.
-Where listingId is the id of the listing that the other user created.
+- Where userId is the other user that the current user is chatting with.
+- Where listingId is the id of the listing that the other user created.
 
 </blockquote>
 
 Displays chat messages between 2 users for one match. The 2 users are determined by the user that matched, and the user that created the listing.
 The chat will actively update every 5 seconds to ensure the user is able to see incoming messages without refreshing the page.
+If request for messages returns empty (not the same as the "Messages" index being empty), the user will be redirected back to the Chat overview page.
 
 updateChat(): Takes no parameters, will request to update chat messages from /getIndividualChat endpoint
 

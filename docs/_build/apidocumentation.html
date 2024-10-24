@@ -50,7 +50,7 @@
 <p>Method: POST</p>
 <p>Will fetch all messages for an individual chat between 2 users, for a single listing.</p>
 <p>Request body must contain a “token” field with the users token, a “listingId” field with the listingId that has been matched with, and a “userId” field with the creator of the matched listing.</p>
-<p>Response body contains a list, with index 0 containing the id of the current user, index 1 containing the name of the current listing, and index 2 containing a SQL response for each message with “text”, “timestamp”, and “userId” fields.</p>
+<p>Response body contains a list, with index 0 containing the id of the current user, index 1 containing the name of the current listing, and index 2 containing a SQL response for each message with “text”, “timestamp”, and “userId” fields. If the match, and therefore the chat, do not exist, the response body will be empty.</p>
 </section>
 <section id="getlisting">
 <h2>/getListing<a class="headerlink" href="#getlisting" title="Link to this heading">¶</a></h2>

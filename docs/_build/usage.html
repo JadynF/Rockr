@@ -34,8 +34,8 @@
   <section id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
 <hr class="docutils" />
-<section id="running-webapp-locally">
-<h2>Running Webapp Locally<a class="headerlink" href="#running-webapp-locally" title="Link to this heading">¶</a></h2>
+<section id="running-webapp-locally-using-react">
+<h2>Running Webapp Locally Using React<a class="headerlink" href="#running-webapp-locally-using-react" title="Link to this heading">¶</a></h2>
 <ol class="simple">
 <li><p>Open a terminal and navigate to /client</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">run</span> <span class="pre">start</span></code></p></li>
@@ -43,7 +43,18 @@
 <li><p>Open a new terminal and navigate to /server</p></li>
 <li><p>Inside server.js, add database credentials in pool variable (credentials found in discord)</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">node</span> <span class="pre">server.js</span></code></p></li>
-<li><p>Everything should be running locally</p></li>
+<li><p>Everything should be running locally, access webpage locally through React specified port</p></li>
+</ol>
+</section>
+<section id="running-webapp-locally-using-static-resources">
+<h2>Running Webapp Locally Using Static Resources<a class="headerlink" href="#running-webapp-locally-using-static-resources" title="Link to this heading">¶</a></h2>
+<ol class="simple">
+<li><p>Open a terminal and navigate to /client</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">run</span> <span class="pre">build</span></code></p></li>
+<li><p>The build folder should contain the React build, copy this folder into the /server folder</p></li>
+<li><p>Navigate to /server in the terminal</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">node</span> <span class="pre">server.js</span></code></p></li>
+<li><p>Everything should be running locally, access webpage locally through webserver specified port</p></li>
 </ol>
 </section>
 <section id="adding-to-documentation">

@@ -25,7 +25,7 @@ Will fetch all messages for an individual chat between 2 users, for a single lis
 
 Request body must contain a "token" field with the users token, a "listingId" field with the listingId that has been matched with, and a "userId" field with the creator of the matched listing.
 
-Response body contains a list, with index 0 containing the id of the current user, index 1 containing the name of the current listing, and index 2 containing a SQL response for each message with "text", "timestamp", and "userId" fields.
+Response body contains a list, with index 0 containing the id of the current user, index 1 containing the name of the current listing, and index 2 containing a SQL response for each message with "text", "timestamp", and "userId" fields. If the match, and therefore the chat, do not exist, the response body will be empty.
 
 ## /getListing
 

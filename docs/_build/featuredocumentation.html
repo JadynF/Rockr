@@ -63,6 +63,7 @@ User can input their personal information and submit it.</p>
 <h3>Home.js<a class="headerlink" href="#home-js" title="Link to this heading">¶</a></h3>
 <p>The Home Page. Can be accessed via a successful login on the Login Page.</p>
 <p>Displays a ‘listing’ for the user to ‘swipe’ “Yes!” or “No!” on, which contains an image of a chair.
+Will only pull listings that fall into the current user’s preferences.
 Contains a side menu which is accessed via a ‘Show Menu’ button in the top-left of the page.
 Contains a header which displays the name of the webpage.</p>
 <p>Requires Authorization</p>
@@ -71,11 +72,14 @@ Contains a header which displays the name of the webpage.</p>
 <h3>IndividualChat.js<a class="headerlink" href="#individualchat-js" title="Link to this heading">¶</a></h3>
 <p>The singular chat page. Can be accessed through Chat.js page.</p>
 <p>Contains URL parameters:</p>
-<blockquote><p>IndividualChat/{userId}/{listingId}
-Where userId is the other user that the current user is chatting with.
-Where listingId is the id of the listing that the other user created.</p>
+<blockquote><p>IndividualChat/{userId}/{listingId}</p>
+<ul class="simple">
+<li><p>Where userId is the other user that the current user is chatting with.</p></li>
+<li><p>Where listingId is the id of the listing that the other user created.</p></li>
+</ul>
 </blockquote><p>Displays chat messages between 2 users for one match. The 2 users are determined by the user that matched, and the user that created the listing.
-The chat will actively update every 5 seconds to ensure the user is able to see incoming messages without refreshing the page.</p>
+The chat will actively update every 5 seconds to ensure the user is able to see incoming messages without refreshing the page.
+If request for messages returns empty (not the same as the “Messages” index being empty), the user will be redirected back to the Chat overview page.</p>
 <p>updateChat(): Takes no parameters, will request to update chat messages from /getIndividualChat endpoint</p>
 <p>sendMessage(): Takes no parameters, will request to insert current message into the database through /sendMessage endpoint</p>
 <p>Requires Authorization</p>

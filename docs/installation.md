@@ -13,4 +13,6 @@
 2. Ensure Node.js and Express are installed
 3. cd into /client
 4. Run `npm i`
-5. Everything should be ready to run, see [Usage](usage.md)
+5. cd into /server
+6. Run `npm i`
+7. Everything should be ready to run, see [Usage](usage.md)

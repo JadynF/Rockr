@@ -6,7 +6,7 @@ const path = require('path');
 
 const app = express();
 
-const TIMEOUT = 15; // in minutes
+const TIMEOUT = 10; // in minutes
 const loginQuery = require("./functions/loginQuery.js");
 const createAcctQuery = require("./functions/createAcctQuery.js");
 let userTokenMap = new Map(); // {username: [token, loginTime]}
