@@ -16,11 +16,7 @@ app.use(express.json());
 
 // Create a MySQL connection pool
 const pool = mysql.createPool({
-  host: 'rockrdatabase-do-user-18048731-0.g.db.ondigitalocean.com',
-  user: 'doadmin',
-  password: 'AVNS_Qd4pwVZ6xO7LWrZRrRp',
-  database: 'defaultdb',
-  port: 25060
+
 });
 
 // Test the database connection
@@ -263,29 +259,49 @@ app.post("/getIndividualChat", async (req, res) => {
   if (!username)
     return;
 
-  try {
-    let query = "SELECT id FROM User_information WHERE '" + username + "' = username;";
-    let queryResponse = await sendQuery(query);
-    let myId = queryResponse[0][0].id;
+  let query = "SELECT id FROM User_information WHERE '" + username + "' = username;";
+  let queryResponse = await sendQuery(query);
+  if (!queryResponse)
+    return;
+  let myId = queryResponse[0][0].id;
 
-    query = "SELECT id FROM User_information WHERE '" + otherUser + "' = username;";
-    queryResponse = await sendQuery(query);
-    let otherId = queryResponse[0][0].id;
+  query = "SELECT id FROM User_information WHERE '" + otherUser + "' = username;";
+  queryResponse = await sendQuery(query);
+  if (!queryResponse)
+    return;
+  let otherId = queryResponse[0][0].id;
 
-    query = "SELECT listingName FROM Listings WHERE listingId = " + listingId + ";";
-    queryResponse = await sendQuery(query);
-    let listingName = queryResponse[0][0].listingName;
+  query = "SELECT creatorId FROM Listings WHERE listingId = " + listingId + ";";
+  queryResponse = await sendQuery(query);
+  let actualCreator = queryResponse[0][0].creatorId;
 
-    query = "SELECT text, timestamp, userId FROM Messages WHERE " + myId + " = userId AND " + otherId + " = receiverId UNION SELECT text, timestamp, userId FROM Messages WHERE " + otherId + " = userId AND " + myId + " = receiverId ORDER BY timestamp;";
-    queryResponse = await sendQuery(query);
-    let messages = queryResponse[0];
-
-    console.log("responding with individual chat");
-    return res.send(JSON.stringify([myId, listingName, messages]));
+  query = "SELECT * FROM MatchedWith WHERE userId = " + myId + " AND listingId = " + listingId + ";";
+  queryResponse = await sendQuery(query);
+  console.log(queryResponse[0][0]);
+  console.log(actualCreator);
+  console.log(otherUser);
+  if (!queryResponse)
+    return;
+  else if (myId == actualCreator);
+  else if (!queryResponse[0][0] || actualCreator != otherId) {
+    console.log("not matched, going back");
+    return res.send(JSON.stringify(""));
   }
-  catch (error) {
-    console.log("Query error");
-  }
+
+  query = "SELECT listingName FROM Listings WHERE listingId = " + listingId + ";";
+  queryResponse = await sendQuery(query);
+  if (!queryResponse)
+    return;
+  let listingName = queryResponse[0][0].listingName;
+
+  query = "SELECT text, timestamp, userId FROM Messages WHERE " + myId + " = userId AND " + otherId + " = receiverId AND listingId = " + listingId + " UNION SELECT text, timestamp, userId FROM Messages WHERE " + otherId + " = userId AND " + myId + " = receiverId AND listingId = " + listingId + " ORDER BY timestamp;";
+  queryResponse = await sendQuery(query);
+  if (!queryResponse)
+    return;
+  let messages = queryResponse[0];
+  console.log("responding with individual chat");
+
+  return res.send(JSON.stringify([myId, listingName, messages]));
 })
 
 app.post("/sendMessage", async (req, res) => {

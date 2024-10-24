@@ -28,8 +28,8 @@ export default function Login() {
             username: uNameInput,
             password: passInput
         };
-        console.log('/login');
-        fetch('/login', {
+        console.log(host + '/login');
+        fetch(host + '/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

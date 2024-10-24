@@ -7,6 +7,7 @@ import "../styles/IndividualChat.css";
 
 export default function IndividualChat() {
     const host = process.env.REACT_APP_BACKEND_HOST;
+    const navigate = useNavigate();
 
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const toggleMenu = () => {
@@ -33,7 +34,7 @@ export default function IndividualChat() {
             userId: userId,
             listingId: listingId
         } 
-        fetch("/getIndividualChat", {
+        fetch(host + "/getIndividualChat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -42,6 +43,9 @@ export default function IndividualChat() {
         })
         .then(res => res.json())
         .then(data => {
+            if (!data) {
+                navigate("/Home");
+            }
             setMyId(data[0]);
             setListingName(data[1]);
             try {
@@ -69,7 +73,7 @@ export default function IndividualChat() {
             message: inputMessage,
             listingId: listingId
         }
-        fetch("/sendMessage", {
+        fetch(host + "/sendMessage", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

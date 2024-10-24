@@ -13,7 +13,7 @@ function Listing() {
             token: localStorage.getItem('token'),
             currListing: shownImage[1],
         };
-        fetch('/getListing', {
+        fetch(host + '/getListing', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ function Listing() {
             token: localStorage.getItem('token'),
             currListing: shownImage[1]
         };
-        fetch('/matchedListing', {
+        fetch(host + '/matchedListing', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

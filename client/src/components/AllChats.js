@@ -14,7 +14,7 @@ function AllChats({ navigate }) {
         let body = {
             token: myToken
         }
-        fetch('/getChatOverviews', {
+        fetch(host + '/getChatOverviews', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

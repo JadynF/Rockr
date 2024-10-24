@@ -5,7 +5,7 @@ export const Authorization = async () => {
         const auth = {
             token: myToken
         };
-        fetch('/isAuthorized', {
+        fetch(host + '/isAuthorized', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
