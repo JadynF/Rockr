@@ -25,7 +25,7 @@ Will fetch all messages for an individual chat between 2 users, for a single lis
 
 Request body must contain a "token" field with the users token, a "listingId" field with the listingId that has been matched with, and a "userId" field with the creator of the matched listing.
 
-Response body contains a list, with index 0 containing the id of the current user, index 1 containing the name of the current listing, and index 2 containing a SQL response for each message with "text", "timestamp", and "userId" fields. If the match, and therefore the chat, do not exist, the response body will be empty.
+Response body contains a list, with index 0 containing the id of the current user, index 1 containing the name of the current listing, index 2 containing a SQL response for each message with "text", "timestamp", and "userId" fields, index 3 contains imgPath, index 5 contains the chair condition, index 6 contains the price of the chair, index 7 contains the color of the chair, index 8 contains the listings creator username, index 9 contains the username for the requesting user. If the match, and therefore the chat, do not exist, the response body will be empty.
 
 ## /getListing
 
@@ -35,7 +35,7 @@ Will fetch listings for the current user.
 
 Request body must contain a "token" field with the users token (localStorage.getItem('token')).
 
-Response body is a JSON object that has "imagePath" field to get the listing image on the back-end webserver, the "listingId" for the listing, and the "creatorUsername" for the listing.
+Response body is a JSON object that has "imagePath" field to get the listing image on the back-end webserver, the "listingId" for the listing, the "creatorUsername" for the listing, the "listingName" for the listing, the "chairCondition" on the chair, the "chairPrice" for the chair, and the "chairColor" for the chair.
 
 ## /isAuthroized
 
