@@ -9,10 +9,12 @@ export default function Listings() {
     const [listings, setListings] = useState([]);
     const [filteredListings, setFilteredListings] = useState(listings);
     const [showModal, setShowModal] = useState(false);
-    const [newListing, setNewListing] = useState({ name: '', description: '', image: null, color: '', condition: '', price: '' });
+    const [newListing, setNewListing] = useState({ name: '', description: '', image: null, color: '', condition: '', price: '', status: 'Active',});
     const [isEditing, setIsEditing] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
     const [selectedListing, setSelectedListing] = useState(null);
+    const [selectedListings, setSelectedListings] = useState([]);
+    
 
     const [filters, setFilters] = useState({
         color: '',
@@ -66,6 +68,13 @@ export default function Listings() {
         setListings(updatedListings);
     };
 
+
+    const toggleStatus = (index) => {
+        const updatedListings = [...listings];
+        updatedListings[index].status = updatedListings[index].status === 'Active' ? 'Sold' : 'Active';
+        setListings(updatedListings);
+    };
+
     // handle filter changes
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -99,19 +108,32 @@ export default function Listings() {
         filterListings(); 
     }, [listings]);
 
-    // Handle click on listing to view details
+
     const handleListingClick = (index) => {
         setSelectedListing(filteredListings[index]);
         toggleModal();
     };
 
-    // Close modal when clicking outside of it
+
     const handleOutsideClick = (e) => {
         if (e.target.className === 'modal') {
             setShowModal(false);
             setSelectedListing(null);
         }
     };
+
+    const toggleSelectListing = (index) => {
+        setSelectedListings((prevSelected) =>
+            prevSelected.includes(index)
+                ? prevSelected.filter((i) => i !== index)
+                : [...prevSelected, index]
+                );
+            };
+
+        const deleteSelectedListings = () => {
+            setListings(listings.filter((_, index) => !selectedListings.includes(index)));
+            setSelectedListings([]); 
+        };
 
     return (
         <div>
@@ -169,6 +191,11 @@ export default function Listings() {
                 </button>
             </div>
 
+            {selectedListings.length > 0 && (
+                <button onClick={deleteSelectedListings} className="delete-selected-button">
+                    Delete Selected
+                </button>
+            )}
 
             {showModal && (
                 <div className="modal" onClick={handleOutsideClick}>
@@ -182,6 +209,7 @@ export default function Listings() {
                                     <p>Color: {selectedListing.color}</p>
                                     <p>Condition: {selectedListing.condition}</p>
                                     <p>Price: ${selectedListing.price}</p>
+                                    <p>Status: {selectedListing.status}</p>
                                 </div>
                                 <button onClick={() => setShowModal(false)} className="close-button">Close</button>
                             </>
@@ -222,6 +250,12 @@ export default function Listings() {
                                 <label>Price:</label>
                                 <input type="number" name="price" value={newListing.price} onChange={handleInputChange} />
                                 
+                                <label>Status:</label>
+                                <select name="status" value={newListing.status} onChange={handleInputChange}>
+                                    <option value="Active">Active</option>
+                                    <option value="Sold">Sold</option>
+                                </select>
+
                                 <label>Picture:</label>
                                 <input type="file" accept="image/*" onChange={handleImageUpload} />
                                 <button onClick={handleSubmit} className="submit-button">
@@ -236,11 +270,19 @@ export default function Listings() {
 
             
         {/* Display filtered listings */}
-            <div className="listings-display">
+        <div className="listings-display">
                 <h2 className="listings-header">Your Listings</h2>
                 <div className="listings-grid"> 
                     {filteredListings.map((listing, index) => (
                         <div key={index} className="listing-item" onClick={() => handleListingClick(index)}>
+                            <div className="checkbox-container">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedListings.includes(index)}
+                                    onChange={() => toggleSelectListing(index)}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            </div>
                             <img src={listing.image} alt={listing.name} />
                             <h3>{listing.name}</h3>
                             <p>Price: ${listing.price}</p>
@@ -269,11 +311,18 @@ export default function Listings() {
                             >
                                 Delete
                             </button>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleStatus(index);
+                                }}
+                                className="status-button"
+                            >
+                                {listing.status === 'Active' ? 'Mark as Sold' : 'Mark as Active'}
+                            </button>
                         </div>
-
                     ))}
                 </div>
-
             </div>
         </div>
     );
