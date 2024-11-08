@@ -194,12 +194,14 @@ app.post('/getUser', async (req, res) => {
   const userT = req.body.token;
   const user = isAuthorized(userT);
   if(user) {
-    try {
-      let userInfo = await sendQuery('SELECT * FROM User_information WHERE username = ?', [user]);
-      return res.send(userInfo[0][0]);
-    } catch (error) {
-      res.status(500).send('Error retrieving your information.');
-    }
+    let userInfo = await sendQuery('SELECT * FROM User_information WHERE username = ?', [user]);
+    console.log(userInfo);
+    let query = "SELECT * FROM UserPreferences WHERE userId = " + userInfo[0][0].id + ";";
+    console.log(query);
+    let response = await sendQuery(query);
+    console.log(response[0][0]);
+    console.log(userInfo[0][0]);
+    return res.send(JSON.stringify([userInfo[0][0], response[0][0]]));
   } else {
     return res.send(JSON.stringify({error: "Failed to find user."}));
   }
@@ -230,6 +232,39 @@ app.post('/newUserInfo', async (req, res) => {
       res.status(500).send(JSON.stringify({error: 'Error retrieving your new info.'}));
     }
   }
+});
+
+// sets new user preferences
+app.post('/newPreferences', async (req, res) => {
+  const body = req.body;
+  const userToken = body.token;
+  const username = isAuthorized(userToken);
+  const newPrice = body.newPrice;
+  let newColor = body.newColor;
+  let newCondition = body.newCondition;
+
+  let query = "SELECT id FROM User_information WHERE username = '" + username + "';";
+  let userId = "";
+  let queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+  userId = queryResponse[0][0].id;
+
+  if (newColor != "NULL")
+    newColor = `'${newColor}'`;
+
+  if (newCondition != "NULL")
+    newCondition = `'${newCondition}'`;
+
+  query = "UPDATE UserPreferences SET prefCondition = " + newCondition + ", prefPrice = " + newPrice + ", prefColor = " + newColor + " WHERE userId = " + userId;
+  console.log(query);
+  queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return res.send(JSON.stringify({response: false}));
+  }
+  return res.send(JSON.stringify({response: true}));
+
 });
 
 app.post('/newUserPassword', async (req, res) => {
@@ -274,6 +309,8 @@ app.post('/getListing', async (req, res) => {
   }
   userPreferences = queryResponse[0][0];
 
+  console.log(userPreferences);
+
   let prefPriceStr = "";
   let prefColorStr = "";
   let prefConditionStr = "";
@@ -282,7 +319,7 @@ app.post('/getListing', async (req, res) => {
     prefPriceStr = " AND L.chairPrice <= " + userPreferences.prefPrice;
   if (userPreferences.prefColor)
     prefColorStr = " AND L.chairColor = '" + userPreferences.prefColor + "'";
-  if (userPreferences.prefConditionStr)
+  if (userPreferences.prefCondition)
     prefConditionStr = " AND L.chairCondition = '" + userPreferences.prefCondition + "'";
 
   console.log(prefPriceStr);
@@ -291,6 +328,7 @@ app.post('/getListing', async (req, res) => {
 
   // used to query database to get listing
   query = "SELECT listingId, imagePath, creatorId, listingName, chairCondition, chairPrice, chairColor FROM (SELECT * FROM Listings WHERE listingId NOT IN (SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.id = " + userId + " AND S.userId = U.id)) AS L, (SELECT id FROM User_information WHERE id = " + userId + ") AS U WHERE L.creatorId <> U.id" + prefPriceStr + prefColorStr + prefConditionStr + ";";
+  console.log(query);
   //query = "SELECT listingId, imagePath, creatorId FROM Listings WHERE listingId NOT IN ( SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.id = " + userId + " AND S.userId = U.id) LIMIT 1;";
   let listingId = ""
   let imagePath = ""

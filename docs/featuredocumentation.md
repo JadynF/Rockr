@@ -29,7 +29,7 @@ User can input their personal information and submit it.
 ### Home.js
 The Home Page. Can be accessed via a successful login on the Login Page.
 
-Displays a 'listing' for the user to 'swipe' "Yes!" or "No!" on, which contains an image of a chair.
+Displays a 'listing' for the user to 'swipe' "Yes!" or "No!" on, which contains an image of a chair with details below.
 Will only pull listings that fall into the current user's preferences.
 Contains a side menu which is accessed via a 'Show Menu' button in the top-left of the page.
 Contains a header which displays the name of the webpage.
@@ -48,7 +48,7 @@ IndividualChat/{userId}/{listingId}
 
 </blockquote>
 
-Displays chat messages between 2 users for one match. The 2 users are determined by the user that matched, and the user that created the listing.
+Displays chat messages between 2 users for one match. The 2 users are determined by the user that matched, and the user that created the listing. The matched listing and listing details are shown on the far right side.
 The chat will actively update every 5 seconds to ensure the user is able to see incoming messages without refreshing the page.
 If request for messages returns empty (not the same as the "Messages" index being empty), the user will be redirected back to the Chat overview page.
 
@@ -108,7 +108,8 @@ Takes (isMenuVisible : useState) and (toggleMenu : method) props.
 ### Listing.js
 Returns a listing div. Creates a section to display a listing image and for decision buttons.
 
-Currently only pulls from locally stored images, in future it should pull from back-end server.
+Requests to get listings from backend webserver. 
+Uses framer-motion to handle motion stylings.
 
 ### SideMenu.js
 Returns a side menu component. Creates a toggleable menu on the left of the page with links to other pages.

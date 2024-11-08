@@ -31,6 +31,11 @@ export default function Profile() {
     const [confirmPass, setConfirmPass] = useState("");
     const [passwordMessage, setPMess] = useState("");
 
+    const [userPreferences, setUserPreferences] = useState([null, null, null]); //[prefPrice, prefColor, prefCondition]
+    const [newMaxPrice, setNewMaxPrice] = useState("");
+    const [newPrefColor, setNewPrefColor] = useState("");
+    const [newPrefCondition, setNewPrefCondition] = useState("");
+
     //sidebar variables
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const menuNames = ["Home", "Chat", "My Listings", "Settings"];
@@ -48,11 +53,12 @@ export default function Profile() {
         })
         .then(res => res.json())
         .then(data => {
-            setFName(data.FirstName);
-            setLName(data.LastName);
-            setUName(data.username);
-            setEmail(data.email);
-            setPhoneNum(data.phone);
+            setFName(data[0].FirstName);
+            setLName(data[0].LastName);
+            setUName(data[0].username);
+            setEmail(data[0].email);
+            setPhoneNum(data[0].phone);
+            setUserPreferences([data[1].prefPrice, data[1].prefColor, data[1].prefCondition]);
         })
         .catch(error => console.error(error));
     }
@@ -109,6 +115,42 @@ export default function Profile() {
         .catch(error => console.error(error));
     }
 
+    const changeUserPreferences = () => {
+        console.log(newMaxPrice);
+        console.log(newPrefColor);
+        console.log(newPrefCondition);
+
+        let payload = {token: localStorage.getItem('token')};
+
+        if (newMaxPrice == "")
+            payload.newPrice = "NULL";
+        else
+            payload.newPrice = newMaxPrice;
+
+        console.log(newPrefColor);
+        if (newPrefColor == "")
+            payload.newColor = "NULL";
+        else
+            payload.newColor = newPrefColor;
+
+        console.log(newPrefColor);
+        if (newPrefCondition == "")
+            payload.newCondition = "NULL";
+        else
+            payload.newCondition = newPrefCondition;
+
+        fetch(host + "/newPreferences", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => grabUserInfo());
+
+    }
+
     const changePassword = () => {
         if(newPassword === confirmPass){
             let mytoken = localStorage.getItem('token');
@@ -155,6 +197,55 @@ export default function Profile() {
                     alignItems: "center",
                     flex: "1",
                 }}>
+                    <div className="user-info-box">
+                        <div>
+                            <h2>User Preferences</h2>
+                        </div>
+                        {console.log(userPreferences[0])}
+                        <p class="profile-description">Max Price: {userPreferences[0] == null ? "None" : "$" + userPreferences[0]}</p>
+                        <p></p>
+                        <p class="profile-description">Preferred Color: {userPreferences[1] == null ? "None" : userPreferences[1]}</p>
+                        <p></p>
+                        <p class="profile-description">Preferred Condition: {userPreferences[2] == null ? "None" : userPreferences[2]}</p>
+
+                        <Popup trigger={<button class="button">Change Profile Info</button>} position="right">
+                            <div class="change-info-box">
+                                <label>New Max Price: </label>
+                                <div>
+                                <input type="text" class="input-text" value={newMaxPrice} placeholder={userPreferences[0]} onChange={(e) => setNewMaxPrice(e.target.value)} />
+                                </div>
+                                <label>New Preferred Color: </label>
+                                <div>
+                                <select value={newPrefColor} onChange={(e) => setNewPrefColor(e.target.value)}>
+                                    <option value="">None</option>
+                                    <option value="Red">Red</option>
+                                    <option value="Orange">Orange</option>
+                                    <option value="Yellow">Yellow</option>
+                                    <option value="Green">Green</option>
+                                    <option value="Blue">Blue</option>
+                                    <option value="Purple">Purple</option>
+                                    <option value="White">White</option>
+                                    <option value="Black">Black</option>
+                                    <option value="Gray">Gray</option>
+                                    <option value="Brown">Beige</option>
+                                    <option value="Beige">Beige</option>
+                                    <option value="Pink">Pink</option>
+                                </select>
+                                </div>
+                                <label>New Preferred Condition: </label>
+                                <div>
+                                <select value={newPrefCondition} placeholder={userPreferences[2]} onChange={(e) => setNewPrefCondition(e.target.value)}>
+                                    <option value="">None</option>
+                                    <option value="New">New</option>
+                                    <option value="Used (No Defects)">Used (No Defects)</option>
+                                    <option value="Used (Slightly Damaged)">Used (Slightly Damaged)</option>
+                                    <option value="Used (Heavily Damaged)">Used (Heavily Damaged)</option>
+                                </select>
+                                </div>
+                                <button class="button" onClick={changeUserPreferences}>Submit New Preferences</button>
+                            </div>
+                        </Popup>
+                    </div>
                     <div className="user-info-box">
                         <div>
                             <h2>User Information</h2>
