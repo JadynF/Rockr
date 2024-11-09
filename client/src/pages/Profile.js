@@ -210,9 +210,18 @@ export default function Profile() {
 
                         <Popup trigger={<button class="button">Change Profile Info</button>} position="right">
                             <div class="change-info-box">
-                                <label>New Max Price: </label>
+                            <label>New Max Price: </label>
                                 <div>
-                                <input type="text" class="input-text" value={newMaxPrice} placeholder={userPreferences[0]} onChange={(e) => setNewMaxPrice(e.target.value)} />
+                                    <input 
+                                        type="range" 
+                                        class="input-range" 
+                                        min="0" 
+                                        max="1000" 
+                                        step="10" 
+                                        value={newMaxPrice} 
+                                        onChange={(e) => setNewMaxPrice(e.target.value)} 
+                                    />
+                                    <span>${newMaxPrice || userPreferences[0]}</span>
                                 </div>
                                 <label>New Preferred Color: </label>
                                 <div>
