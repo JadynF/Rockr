@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
@@ -8,6 +9,20 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 
 const app = express();
+
+// Set up multer to store files in a custom location with the correct extension
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'build/chairImages/');  // Specify your folder where images will be stored
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);  // Extract the file extension
+    const filename = Date.now() + ext;  // Create a unique filename using current timestamp
+    cb(null, filename);  // Save file with the new name and original extension
+  }
+});
+
+const upload = multer({ storage });
 
 const TIMEOUT = 15; // minutes
 let userTokenMap = new Map(); // {username: [token, loginTime]}
@@ -363,6 +378,59 @@ app.post('/getListing', async (req, res) => {
   console.log("--------------------------------------");
   return res.send(JSON.stringify({imagePath: responsePath, listingId: listingId, creatorUsername: creatorUsername, listingName: listingName, chairCondition: chairCondition, chairPrice: chairPrice, chairColor: chairColor}));
 });
+
+app.post('/getMyListings', async (req, res) => {
+  let body = req.body;
+  const username = isAuthorized(body.token);
+  if (!username)
+    return;
+
+  let query = "SELECT id FROM User_information WHERE username = '" + username + "';"
+  let userId = "";
+  let queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+  userId = queryResponse[0][0].id;
+
+  query = "SELECT * FROM Listings WHERE creatorId = " + userId + ";";
+  queryResponse = await sendQuery(query);
+  console.log(queryResponse[0]);
+  console.log("My Listings");
+
+  return res.send(JSON.stringify(queryResponse[0]));
+})
+
+app.post('/addListing', upload.single('image'), async (req, res) => {
+  let body = req.body;
+  let newImage = req.file;
+  const username = isAuthorized(body.token);
+  if (!username)
+    return;
+
+  let query = "SELECT id FROM User_information WHERE username = '" + username + "';"
+  let userId = "";
+  let queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+  userId = queryResponse[0][0].id;
+
+  let imagePath = "/chairImages/" + newImage.filename;
+  let listingName = body.name;
+  let listingCondition = body.condition;
+  let listingPrice = body.price;
+  let listingColor = body.color;
+  
+  let insertQuery = "INSERT INTO Listings (imagePath, listingName, chairCondition, chairPrice, chairColor, creatorId) VALUES ('" + imagePath + "', '" + listingName + "', '" + listingCondition + "', " + listingPrice + ", '" + listingColor + "', " + userId + ");";
+  queryResponse = await sendQuery(insertQuery);
+  if (!queryResponse)
+    return;
+
+  return res.send(JSON.stringify({response: true}));
+
+
+})
 
 app.post('/matchedListing', async (req, res) => {
   console.log("Attempting to push match");

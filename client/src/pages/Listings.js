@@ -6,14 +6,17 @@ import "../styles/Home.css";
 export default function Listings() {
     Authorization();
 
+    const host = process.env.REACT_APP_BACKEND_HOST;
+
     const [listings, setListings] = useState([]);
     const [filteredListings, setFilteredListings] = useState(listings);
     const [showModal, setShowModal] = useState(false);
-    const [newListing, setNewListing] = useState({ name: '', description: '', image: null, color: '', condition: '', price: '', status: 'Active',});
+    const [newListing, setNewListing] = useState({ name: '', description: '', color: '', condition: '', price: '', status: 'Active',});
     const [isEditing, setIsEditing] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
     const [selectedListing, setSelectedListing] = useState(null);
     const [selectedListings, setSelectedListings] = useState([]);
+    const [newImage, setNewImage] = useState(null);
     
 
     const [filters, setFilters] = useState({
@@ -35,7 +38,10 @@ export default function Listings() {
 
     // Handle image upload
     const handleImageUpload = (e) => {
-        setNewListing({ ...newListing, image: URL.createObjectURL(e.target.files[0]) });
+        const file = e.target.files[0];
+        if (file) {
+            setNewImage(file);
+        }
     };
 
     // Handle submission for adding or editing a listing
@@ -46,11 +52,28 @@ export default function Listings() {
             setListings(updatedListings);
         } else {
             setListings([...listings, newListing]);
+            console.log(newImage);
+            const formData = new FormData();
+            formData.append('token', localStorage.getItem('token'));
+            for (const [key, value] of Object.entries(newListing)) {
+                formData.append(key, value);
+            }
+            formData.append('image', newImage);
+            fetch(host + "/addListing", {
+                method: "POST",
+                body: formData,
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("here");
+                console.log(data);
+                getMyListings();
+                setNewListing({ name: '', description: '', image: null, color: '', condition: '', price: '' });
+                setIsEditing(false);
+                toggleModal();
+                setNewImage(null);
+            });
         }
-
-        setNewListing({ name: '', description: '', image: null, color: '', condition: '', price: '' });
-        setIsEditing(false);
-        toggleModal();
     };
 
     // handle edit button click
@@ -93,20 +116,43 @@ export default function Listings() {
     };
 
     useEffect(() => {
+        console.log("Filtering listings:");
+        console.log(listings);
         filterListings();
     }, [filters, listings]);
 
     
     useEffect(() => {
-        const savedListings = JSON.parse(localStorage.getItem('listings')) || [];
-        setListings(savedListings);
+        // fetch listings
+        getMyListings();
     }, []);
 
-    useEffect(() => {
-
-        localStorage.setItem('listings', JSON.stringify(listings));
-        filterListings(); 
-    }, [listings]);
+    const getMyListings = () => {
+        let mytoken = localStorage.getItem("token");
+        fetch(host + '/getMyListings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({token: mytoken})
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            let list = [];
+            for (let i = 0; i < data.length; i++) {
+                console.log(data[i]);
+                let listing = data[i];
+                console.log(listing.listingName);
+                console.log(listing.chairColor);
+                list.push({name: listing.listingName, color: listing.chairColor, condition: listing.chairCondition, price: listing.chairPrice, imagePath: listing.imagePath});
+            }
+            console.log(listings);
+            console.log(list);
+            setListings(list);
+        })
+        ;
+    }
 
 
     const handleListingClick = (index) => {
@@ -130,10 +176,10 @@ export default function Listings() {
                 );
             };
 
-        const deleteSelectedListings = () => {
-            setListings(listings.filter((_, index) => !selectedListings.includes(index)));
-            setSelectedListings([]); 
-        };
+    const deleteSelectedListings = () => {
+        setListings(listings.filter((_, index) => !selectedListings.includes(index)));
+        setSelectedListings([]); 
+    };
 
     return (
         <div>
@@ -204,7 +250,7 @@ export default function Listings() {
                             <>
                                 <h2>{selectedListing.name}</h2>
                                 <div className="listing-details">
-                                    {selectedListing.image && <img src={selectedListing.image} alt={selectedListing.name} />}
+                                    {selectedListing.image && <img src={selectedListing.imagePath} alt={selectedListing.name} />}
                                     <p>{selectedListing.description}</p>
                                     <p>Color: {selectedListing.color}</p>
                                     <p>Condition: {selectedListing.condition}</p>
@@ -218,8 +264,6 @@ export default function Listings() {
                                 <h2>{isEditing ? "Edit Listing" : "Add New Listing"}</h2>
                                 <label>Name:</label>
                                 <input type="text" name="name" value={newListing.name} onChange={handleInputChange} />
-                                <label>Description:</label>
-                                <input type="text" name="description" value={newListing.description} onChange={handleInputChange} />
                                 
                                 <label>Color:</label>
                                 <select name="color" value={newListing.color} onChange={handleInputChange}>
@@ -258,7 +302,7 @@ export default function Listings() {
 
                                 <label>Picture:</label>
                                 <input type="file" accept="image/*" onChange={handleImageUpload} />
-                                <button onClick={handleSubmit} className="submit-button">
+                                <button onClick={handleSubmit} className="submit-button" disabled={(newImage != null && newListing.status != '' && newListing.price != '' && newListing.condition != '' && newListing.color != '' && newListing.name != '') ? false : true}>
                                     {isEditing ? "Save Changes" : "Done"}
                                 </button>
                                 <button onClick={toggleModal} className="close-button">Cancel</button>
@@ -283,7 +327,7 @@ export default function Listings() {
                                     onClick={(e) => e.stopPropagation()}
                                 />
                             </div>
-                            <img src={listing.image} alt={listing.name} />
+                            <img src={listing.imagePath} alt={listing.name} />
                             <h3>{listing.name}</h3>
                             <p>Price: ${listing.price}</p>
 
