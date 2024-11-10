@@ -401,6 +401,31 @@ app.post('/getMyListings', async (req, res) => {
   return res.send(JSON.stringify(queryResponse[0]));
 })
 
+app.post('/deleteListing', async (req, res) => {
+  let body = req.body;
+  let listingId = body.listingId;
+
+  let query = "DELETE FROM MatchedWith WHERE listingId = " + listingId + ";";
+  let queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+
+  query = "DELETE FROM Messages WHERE listingId = " + listingId + ";";
+  queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+  
+  query = "DELETE FROM Listings WHERE listingId = " + listingId + ";";
+  queryResponse = await sendQuery(query);
+  if (!queryResponse) {
+    return;
+  }
+
+  return res.send(JSON.stringify({response: true}));
+})
+
 app.post('/addListing', upload.single('image'), async (req, res) => {
   let body = req.body;
   let newImage = req.file;
@@ -486,69 +511,74 @@ app.post("/getChatOverviews", async (req, res) => {
 
 app.post("/getIndividualChat", async (req, res) => {
   console.log("Getting individual chat information");
-  let body = req.body
-  let userToken = body.token;
-  let listingId = body.listingId;
-  let otherUser = body.userId;
-  let username = isAuthorized(userToken);
-  if (!username)
-    return;
+  try {
+    let body = req.body
+    let userToken = body.token;
+    let listingId = body.listingId;
+    let otherUser = body.userId;
+    let username = isAuthorized(userToken);
+    if (!username)
+      return;
 
-  let query = "SELECT id FROM User_information WHERE '" + username + "' = username;";
-  let queryResponse = await sendQuery(query);
-  if (!queryResponse)
-    return;
-  let myId = queryResponse[0][0].id;
+    let query = "SELECT id FROM User_information WHERE '" + username + "' = username;";
+    let queryResponse = await sendQuery(query);
+    if (!queryResponse)
+      return;
+    let myId = queryResponse[0][0].id;
 
-  query = "SELECT id FROM User_information WHERE '" + otherUser + "' = username;";
-  queryResponse = await sendQuery(query);
-  if (!queryResponse)
-    return;
-  let otherId = queryResponse[0][0].id;
+    query = "SELECT id FROM User_information WHERE '" + otherUser + "' = username;";
+    queryResponse = await sendQuery(query);
+    if (!queryResponse)
+      return;
+    let otherId = queryResponse[0][0].id;
 
-  query = "SELECT creatorId FROM Listings WHERE listingId = " + listingId + ";";
-  queryResponse = await sendQuery(query);
-  let actualCreator = queryResponse[0][0].creatorId;
+    query = "SELECT creatorId FROM Listings WHERE listingId = " + listingId + ";";
+    queryResponse = await sendQuery(query);
+    let actualCreator = queryResponse[0][0].creatorId;
 
-  query = "SELECT * FROM MatchedWith WHERE userId = " + myId + " AND listingId = " + listingId + ";";
-  queryResponse = await sendQuery(query);
-  console.log(queryResponse[0][0]);
-  console.log(actualCreator);
-  console.log(otherUser);
-  if (!queryResponse)
-    return;
-  else if (myId == actualCreator);
-  else if (!queryResponse[0][0] || actualCreator != otherId) {
-    console.log("not matched, going back");
+    query = "SELECT * FROM MatchedWith WHERE userId = " + myId + " AND listingId = " + listingId + ";";
+    queryResponse = await sendQuery(query);
+    console.log(queryResponse[0][0]);
+    console.log(actualCreator);
+    console.log(otherUser);
+    if (!queryResponse)
+      return;
+    else if (myId == actualCreator);
+    else if (!queryResponse[0][0] || actualCreator != otherId) {
+      console.log("not matched, going back");
+      return res.send(JSON.stringify(""));
+    }
+
+    query = "SELECT listingName, imagePath, chairCondition, chairPrice, chairColor FROM Listings WHERE listingId = " + listingId + ";";
+    queryResponse = await sendQuery(query);
+    if (!queryResponse)
+      return;
+    let listingName = queryResponse[0][0].listingName;
+    let imgPath = queryResponse[0][0].imagePath;
+    let chrCondition = queryResponse[0][0].chairCondition;
+    let chrPrice = queryResponse[0][0].chairPrice;
+    let chrColor = queryResponse[0][0].chairColor;
+    let creatorUser = "";
+    if (myId == actualCreator) {
+      creatorUser = username;
+    }
+    else {
+      creatorUser = otherUser;
+    }
+
+    query = "SELECT text, timestamp, userId FROM Messages WHERE " + myId + " = userId AND " + otherId + " = receiverId AND listingId = " + listingId + " UNION SELECT text, timestamp, userId FROM Messages WHERE " + otherId + " = userId AND " + myId + " = receiverId AND listingId = " + listingId + " ORDER BY timestamp;";
+    queryResponse = await sendQuery(query);
+    if (!queryResponse)
+      return;
+    let messages = queryResponse[0];
+    console.log("responding with individual chat");
+
+    return res.send(JSON.stringify([myId, listingName, messages, imgPath, chrCondition, chrPrice, chrColor, creatorUser, username]));
+  }
+  catch (exception) {
     return res.send(JSON.stringify(""));
   }
-
-  query = "SELECT listingName, imagePath, chairCondition, chairPrice, chairColor FROM Listings WHERE listingId = " + listingId + ";";
-  queryResponse = await sendQuery(query);
-  if (!queryResponse)
-    return;
-  let listingName = queryResponse[0][0].listingName;
-  let imgPath = queryResponse[0][0].imagePath;
-  let chrCondition = queryResponse[0][0].chairCondition;
-  let chrPrice = queryResponse[0][0].chairPrice;
-  let chrColor = queryResponse[0][0].chairColor;
-  let creatorUser = "";
-  if (myId == actualCreator) {
-    creatorUser = username;
-  }
-  else {
-    creatorUser = otherUser;
-  }
-
-  query = "SELECT text, timestamp, userId FROM Messages WHERE " + myId + " = userId AND " + otherId + " = receiverId AND listingId = " + listingId + " UNION SELECT text, timestamp, userId FROM Messages WHERE " + otherId + " = userId AND " + myId + " = receiverId AND listingId = " + listingId + " ORDER BY timestamp;";
-  queryResponse = await sendQuery(query);
-  if (!queryResponse)
-    return;
-  let messages = queryResponse[0];
-  console.log("responding with individual chat");
-
-  return res.send(JSON.stringify([myId, listingName, messages, imgPath, chrCondition, chrPrice, chrColor, creatorUser, username]));
-})
+});
 
 app.post("/sendMessage", async (req, res) => {
   console.log('sending message');

@@ -29,10 +29,35 @@ export default function VerifyingEmail() {
    
     return (
         <div>
-            <h1>Click here to verify your account:</h1>
-            <button id='sumbitVerify' onClick={VerifyEmail}>Verify</button>
-            <p>{message}</p>
-            <p>{navMessage}</p>
+            <div className = "header" style = {{
+                backgroundImage: 'url("' + host + '/banner.png")',
+                backgroundSize: "cover",
+                backgroundPosition: "right",
+                backgroundRepeat: "no-repeat",
+            }}>
+                <h1>Rockr</h1>
+            </div>
+            <div class="main-container" style = {{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "black",
+                    color: "white",
+                    display: "flex",
+                    flexDirection: "column",
+                }}>
+                <h1>Click here to verify your account:</h1>
+                <button id='sumbitVerify' onClick={VerifyEmail} style = {{
+                            backgroundColor: "black",
+                            color: "white",
+                            padding: "5px 10px",
+                            borderColor: "white",
+                            borderRadius: "100px",
+                            cursor: "pointer",
+                            margin: "10px",
+                }}>Verify</button>
+                <p>{message}</p>
+                <p>{navMessage}</p>
+            </div>
         </div>
     )
 }

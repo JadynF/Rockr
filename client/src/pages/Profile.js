@@ -225,7 +225,11 @@ export default function Profile() {
                                 </div>
                                 <label>New Preferred Color: </label>
                                 <div>
-                                <select value={newPrefColor} onChange={(e) => setNewPrefColor(e.target.value)}>
+                                <select value={newPrefColor} onChange={(e) => setNewPrefColor(e.target.value)} style = {{
+                                    backgroundColor: "#111418",
+                                    color: "white",
+                                    borderRadius: "5px",
+                                }}>
                                     <option value="">None</option>
                                     <option value="Red">Red</option>
                                     <option value="Orange">Orange</option>
@@ -243,7 +247,11 @@ export default function Profile() {
                                 </div>
                                 <label>New Preferred Condition: </label>
                                 <div>
-                                <select value={newPrefCondition} placeholder={userPreferences[2]} onChange={(e) => setNewPrefCondition(e.target.value)}>
+                                <select value={newPrefCondition} placeholder={userPreferences[2]} onChange={(e) => setNewPrefCondition(e.target.value)} style = {{
+                                    backgroundColor: "#111418",
+                                    color: "white",
+                                    borderRadius: "5px",
+                                }}>
                                     <option value="">None</option>
                                     <option value="New">New</option>
                                     <option value="Used (No Defects)">Used (No Defects)</option>

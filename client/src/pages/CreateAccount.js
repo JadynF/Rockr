@@ -72,21 +72,84 @@ export default function CreateAccount() {
 
     return (
         <div>
-            <div>
-                <h1>Welcome to the CreateAccount Page!</h1>
-                <Link to="/Login">Login Page</Link>
+            <div className = "header" style = {{
+                backgroundImage: 'url("' + host + '/banner.png")',
+                backgroundSize: "cover",
+                backgroundPosition: "right",
+                backgroundRepeat: "no-repeat",
+            }}>
+                <h1>Rockr</h1>
             </div>
-            <div>
-                <h2>Create an Account!</h2>
-                <input type="text" id="fNameIn" name="fNameIn" placeholder="First Name" onChange={handleFNameChange} />
-                <input type="text" id="lNameIn" name="lNameIn" placeholder="Last Name" onChange={handleLNameChange} />
-                <input type="text" id="usernameIn" name="usernameIn" placeholder="Username" onChange={handleUsernameChange} />
-                <input type="text" id="passwordIn" name="passwordIn" placeholder="Password" onChange={handlePasswordChange} />
-                <input type="text" id="emailIn" name="emailIn" placeholder="Email" onChange={handleEmailChange} />
-                <input type="text" id="phoneNumIn" name="phoneNumIn" placeholder="Phone Number" onChange={handlePhoneNumChange} />
-                <button onClick={submitCreateAcct}>Submit</button>
+            <div class="main-container" style = {{
+                    justifyContent: "center",
+                }}>
+                <div class="user-info-box">
+                    <h2>Create an Account!</h2>
+                    <div style = {{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}>
+                        <label class="login-label">First Name:</label>
+                        <input type="text" class="input-text" id="fNameIn" name="fNameIn" placeholder="First Name" onChange={handleFNameChange} style = {{
+                            alignSelf: "center"
+                        }}/>
+                    </div>
+                    
+                    <div style = {{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}>
+                        <label class="login-label">Last Name:</label>
+                        <input type="text" class="input-text" id="lNameIn" name="lNameIn" placeholder="Last Name" onChange={handleLNameChange} style = {{
+                            alignSelf: "center"
+                        }}/>
+                    </div>
+
+                    <div style = {{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}>
+                        <label class="login-label">Username:</label>
+                        <input type="text" class="input-text" id="usernameIn" name="usernameIn" placeholder="Username" onChange={handleUsernameChange} style = {{
+                            alignSelf: "center"
+                        }}/>
+                    </div>
+
+                    <div style = {{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}>
+                        <label class="login-label">Password:</label>
+                        <input type="text" class="input-text" id="passwordIn" name="passwordIn" placeholder="Password" onChange={handlePasswordChange} style = {{
+                            alignSelf: "center"
+                        }}/>
+                    </div>
+
+                    <div style = {{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}>
+                        <label class="login-label">Email:</label>
+                        <input type="text" class="input-text" id="emailIn" name="emailIn" placeholder="Email" onChange={handleEmailChange} style = {{
+                            alignSelf: "center"
+                        }}/>
+                    </div> 
+
+                    <button onClick={submitCreateAcct} disabled={fNameInput != '' && lNameInput != '' && usernameInput != '' && passwordInput != '' && emailInput != '' ? false : true} style = {{
+                            backgroundColor: "black",
+                            color: "white",
+                            padding: "5px 10px",
+                            borderColor: "white",
+                            borderRadius: "100px",
+                            cursor: "pointer",
+                            margin: "10px",
+                            opacity: (fNameInput != '' && lNameInput != '' && usernameInput != '' && passwordInput != '' && emailInput != '' ? 1 : .3),
+                    }}>Submit</button>
+                </div>
             </div>
-            <div>
+            <div style = {{
+                color: "white",
+            }}>
                 <p>{message}</p>
             </div>
         </div>

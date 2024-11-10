@@ -15,8 +15,8 @@ export default function Settings() {
     const toggleMenu = () => {
         setIsMenuVisible(prev => !prev);
     }
-    const menuNames = ['Home', 'Chat', 'Profile', 'My Listings', 'Settings'];
-    const menuLinks = ['/Home', '/Chat', '/Profile', '/Listings', '/Settings'];
+    const menuNames = ['Home', 'Chat', 'Profile', 'My Listings'];
+    const menuLinks = ['/Home', '/Chat', '/Profile', '/Listings'];
 
     const [darkMode, setDarkMode] = useState(false);
     const [fontSize, setFontSize] = useState(16);
