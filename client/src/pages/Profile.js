@@ -37,7 +37,7 @@ export default function Profile() {
     const [newPrefCondition, setNewPrefCondition] = useState("");
 
     //sidebar variables
-    const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(true);
     const menuNames = ["Home", "Chat", "My Listings", "Settings"];
     const menuLinks = ["/Home",  "/Chat", "/Listings", "/Settings"];
 
@@ -221,7 +221,9 @@ export default function Profile() {
                                         value={newMaxPrice} 
                                         onChange={(e) => setNewMaxPrice(e.target.value)} 
                                     />
-                                    <span>${newMaxPrice || userPreferences[0]}</span>
+                                    <span style = {{
+                                        alignSelf: "center",
+                                    }}>${newMaxPrice || userPreferences[0]}</span>
                                 </div>
                                 <label>New Preferred Color: </label>
                                 <div>

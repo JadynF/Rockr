@@ -69,6 +69,9 @@ export default function Login() {
                     margin: "0",
                     padding: "0",
                 }}>Login</h1>
+                <p style = {{
+                    color: "red",
+                }}>{loginMessage}</p>
                 <div class="main-container" style = {{
                     justifyContent: "center",
                 }}>
@@ -132,7 +135,6 @@ export default function Login() {
                             margin: "10px",
                         }}>Create Account</Link>
                     </div>
-                    <p>{loginMessage}</p>
                 </div>
             </div>
         </>

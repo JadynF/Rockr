@@ -9,7 +9,7 @@ export default function IndividualChat() {
     const host = process.env.REACT_APP_BACKEND_HOST;
     const navigate = useNavigate();
 
-    const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(true);
     const toggleMenu = () => {
         setIsMenuVisible(prev => !prev);
     }
@@ -78,7 +78,8 @@ export default function IndividualChat() {
     }, [messages]); 
 
     const sendMessage = () => {
-        console.log(inputMessage);
+        if (inputMessage === "")
+            return;
         let body = {
             myId: myId,
             recvName: userId,

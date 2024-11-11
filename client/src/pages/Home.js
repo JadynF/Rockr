@@ -9,7 +9,7 @@ import '../styles/Home.css';
 export default function Home() {
     Authorization();
 
-    const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(true);
 
     const toggleMenu = () => {
         setIsMenuVisible(prev => !prev);

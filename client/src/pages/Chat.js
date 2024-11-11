@@ -9,7 +9,7 @@ import "../styles/Chat.css";
 export default function Chat() {
     Authorization();
 
-    const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(true);
 
     const toggleMenu = () => {
         setIsMenuVisible(prev => !prev);

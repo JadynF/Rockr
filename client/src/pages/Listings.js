@@ -9,7 +9,7 @@ export default function Listings() {
     Authorization();
 
     //sidebar variables
-    const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(true);
     const menuNames = ["Home", "Profile", "Chat", "Settings"];
     const menuLinks = ["/Home",  "/Profile", "/Chat", "/Settings"];
 
@@ -205,6 +205,11 @@ export default function Listings() {
         setSelectedListings([]); 
     };
 
+    const closeModal = () => {
+        setShowModal(false); 
+        setSelectedListing(null);
+    };
+
     return (
         <>
             <Header class="header" isMenuVisible = {isMenuVisible} toggleMenu = {toggleMenu}/>
@@ -302,9 +307,8 @@ export default function Listings() {
                                             <p>Color: {selectedListing.color}</p>
                                             <p>Condition: {selectedListing.condition}</p>
                                             <p>Price: ${selectedListing.price}</p>
-                                            <p>Status: {selectedListing.status}</p>
                                         </div>
-                                        <button onClick={() => setShowModal(false)} className="close-button" style = {{
+                                        <button onClick={() => closeModal()} className="close-button" style = {{
                                             margin: "5px",
                                         }}>Close</button>
                                     </>
@@ -444,10 +448,9 @@ export default function Listings() {
                                             objectFit: "contain",
                                         }}/>
                                         <h3>{listing.name}</h3>
-                                        <p>Price: ${listing.price}</p>
                                 
                                         <div className="hover-overlay">
-                                            <p>Description: {listing.description}</p>
+                                            <p>Price: ${listing.price}</p>
                                             <p>Color: {listing.color}</p>
                                             <p>Condition: {listing.condition}</p>
                                         </div>

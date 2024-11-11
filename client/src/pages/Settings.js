@@ -11,7 +11,7 @@ export default function Settings() {
     Authorization();  // Authorization check
     const navigate = useNavigate();
 
-    const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(true);
     const toggleMenu = () => {
         setIsMenuVisible(prev => !prev);
     }
