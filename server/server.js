@@ -255,6 +255,7 @@ app.post('/newPreferences', async (req, res) => {
   const userToken = body.token;
   const username = isAuthorized(userToken);
   const newPrice = body.newPrice;
+  const newRange = body.newRange;
   let newColor = body.newColor;
   let newCondition = body.newCondition;
 
@@ -272,7 +273,7 @@ app.post('/newPreferences', async (req, res) => {
   if (newCondition != "NULL")
     newCondition = `'${newCondition}'`;
 
-  query = "UPDATE UserPreferences SET prefCondition = " + newCondition + ", prefPrice = " + newPrice + ", prefColor = " + newColor + " WHERE userId = " + userId;
+  query = "UPDATE UserPreferences SET prefCondition = " + newCondition + ", prefPrice = " + newPrice + ", prefColor = " + newColor + ", prefRange = " + newRange + " WHERE userId = " + userId;
   console.log(query);
   queryResponse = await sendQuery(query);
   if (!queryResponse) {

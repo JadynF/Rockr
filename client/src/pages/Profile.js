@@ -31,10 +31,11 @@ export default function Profile() {
     const [confirmPass, setConfirmPass] = useState("");
     const [passwordMessage, setPMess] = useState("");
 
-    const [userPreferences, setUserPreferences] = useState([null, null, null]); //[prefPrice, prefColor, prefCondition]
+    const [userPreferences, setUserPreferences] = useState([null, null, null, null]); //[prefPrice, prefColor, prefCondition, prefRange]
     const [newMaxPrice, setNewMaxPrice] = useState("");
     const [newPrefColor, setNewPrefColor] = useState("");
     const [newPrefCondition, setNewPrefCondition] = useState("");
+    const [newPrefRange, setNewPrefRange] = useState(null);
 
     //sidebar variables
     const [isMenuVisible, setIsMenuVisible] = useState(true);
@@ -58,7 +59,7 @@ export default function Profile() {
             setUName(data[0].username);
             setEmail(data[0].email);
             setPhoneNum(data[0].phone);
-            setUserPreferences([data[1].prefPrice, data[1].prefColor, data[1].prefCondition]);
+            setUserPreferences([data[1].prefPrice, data[1].prefColor, data[1].prefCondition, data[1].prefRange]);
         })
         .catch(error => console.error(error));
     }
@@ -119,6 +120,7 @@ export default function Profile() {
         console.log(newMaxPrice);
         console.log(newPrefColor);
         console.log(newPrefCondition);
+        console.log(newPrefRange);
 
         let payload = {token: localStorage.getItem('token')};
 
@@ -138,6 +140,11 @@ export default function Profile() {
             payload.newCondition = "NULL";
         else
             payload.newCondition = newPrefCondition;
+
+        if (newPrefRange == "")
+            payload.newRange = "NULL";
+        else
+            payload.newRange = newPrefRange;
 
         fetch(host + "/newPreferences", {
             method: 'POST',
@@ -207,10 +214,11 @@ export default function Profile() {
                         <p class="profile-description">Preferred Color: {userPreferences[1] == null ? "None" : userPreferences[1]}</p>
                         <p></p>
                         <p class="profile-description">Preferred Condition: {userPreferences[2] == null ? "None" : userPreferences[2]}</p>
-
-                        <Popup trigger={<button class="button">Change Profile Info</button>} position="right">
+                        <p></p>
+                        <p class="profile-description">Preferred Range: {userPreferences[3] == null ? "None" : userPreferences[3] + " miles"}</p>
+                        <Popup trigger={<button class="button">Change Preferences</button>} position="right">
                             <div class="change-info-box">
-                            <label>New Max Price: </label>
+                                <label>New Max Price: </label>
                                 <div>
                                     <input 
                                         type="range" 
@@ -223,7 +231,7 @@ export default function Profile() {
                                     />
                                     <span style = {{
                                         alignSelf: "center",
-                                    }}>${newMaxPrice || userPreferences[0]}</span>
+                                    }}>{"$" + newMaxPrice || userPreferences[0]}</span>
                                 </div>
                                 <label>New Preferred Color: </label>
                                 <div>
@@ -260,6 +268,21 @@ export default function Profile() {
                                     <option value="Used (Slightly Damaged)">Used (Slightly Damaged)</option>
                                     <option value="Used (Heavily Damaged)">Used (Heavily Damaged)</option>
                                 </select>
+                                </div>
+                                <label>New Max Range: </label>
+                                <div>
+                                    <input 
+                                        type="range" 
+                                        class="input-range" 
+                                        min="0" 
+                                        max="1000" 
+                                        step="1" 
+                                        value={newPrefRange} 
+                                        onChange={(e) => setNewPrefRange(e.target.value)} 
+                                    />
+                                    <span style = {{
+                                        alignSelf: "center",
+                                    }}>{newPrefRange + " miles" || userPreferences[3]}</span>
                                 </div>
                                 <button class="button" onClick={changeUserPreferences}>Submit New Preferences</button>
                             </div>
