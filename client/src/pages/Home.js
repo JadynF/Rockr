@@ -19,7 +19,9 @@ export default function Home() {
     const menuLinks = ["/Profile", "/Chat", "/Listings", "/Settings"];
 
     return (
-        <>
+        <div style = {{
+            overflow: "hidden",
+        }}>
             <Header isMenuVisible = {isMenuVisible} toggleMenu = {toggleMenu}/>
             <div className = 'main-container' style = {{
                 flex: 1,
@@ -27,6 +29,6 @@ export default function Home() {
                 <SideMenu isMenuVisible = {isMenuVisible} menuNames = {menuNames} menuLinks = {menuLinks}/>
                 <Listing/>
             </div>
-        </>
+        </div>
     )
 }
