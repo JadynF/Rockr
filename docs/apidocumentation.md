@@ -7,6 +7,24 @@
 ---
 <blockquote>
 
+## /addListing
+Method: POST
+
+Will create a listing for the user.
+
+Request body must contain the users "token", the listings "image" and the rest of the listings details: "name", "condition", "price", "color".
+
+Response body will be {response: true} if succeeded, {response: false} otherwise.
+
+## /deleteListing
+Method: POST
+
+Will delete the users listing.
+
+Request body must contain the listings "listingId".
+
+Response body will be {response: true}, {response: false} otherwise.
+
 ## /getChatOverviews
 
 Method: POST
@@ -37,6 +55,16 @@ Request body must contain a "token" field with the users token (localStorage.get
 
 Response body is a JSON object that has "imagePath" field to get the listing image on the back-end webserver, the "listingId" for the listing, the "creatorUsername" for the listing, the "listingName" for the listing, the "chairCondition" on the chair, the "chairPrice" for the chair, and the "chairColor" for the chair.
 
+## /getMyListings
+
+Method: POST
+
+Will fetch all of the current users created listings.
+
+Request body requires "token" field with the users token.
+
+Response body contains a JSON object will all of the columns in the listing table: listingId, imagePath, listingName, chairCondition, chairPrice, chairColor, creatorId.
+
 ## /isAuthroized
 
 Method: POST
@@ -66,6 +94,16 @@ Will insert matched listing into the database.
 Body of request needs "token" field with the users token, and "currListing" with the listingId of the current listing.
 
 No response, simply inserts matched data into database.
+
+## /newPreferences
+
+Method: POST
+
+Will set user preferences.
+
+Body of request needs "token" with the users token, "newPrice", "newColor" and "newCondition" for the new preferences.
+
+Response will be {response: true} if succeeded, {response: false} otherwise.
 
 ## /sendMessage
 
