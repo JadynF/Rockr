@@ -299,6 +299,39 @@ app.post('/newUserPassword', async (req, res) => {
   }
 });
 
+app.post('/setLocation', async (req, res) => {
+  const userToken = req.body.token;
+  const userLat = req.body.latitude;
+  const userLong = req.body.longitude;
+  const user = isAuthorized(userToken);
+  if(user) {
+    try{
+      await sendQuery('UPDATE User_information SET latitude=?, longitude=? WHERE username=?', [userLat, userLong, user]);
+      return res.status(200).send(JSON.stringify({response: 'Location updated successfully.'}));
+    } catch (error) {
+      return res.status(500).send(JSON.stringify({response: 'Error updating location'}));
+    }
+  } else {
+    return res.status(500).send(JSON.stringify({response: 'Could not find your account.'}));
+  }
+});
+
+app.post('/getLocation', async (req, res) => {
+  const userToken = req.body.token;
+  const user = isAuthorized(userToken);
+
+  if(user) {
+    try{
+    const [latitude, longitude] = await sendQuery('SELECT Latitude, Longitude FROM User_information WHERE username=?', [user]);
+    return res.status(200).send(JSON.stringify({lat: latitude, long: longitude}));
+    } catch (error) {
+      return res.status(500).send(JSON.stringify({response: 'Error finding your location'}));
+    }
+  } else {
+    return res.status(500).send(JSON.stringify({response: 'Could not find your account.'}));
+  }
+})
+
 app.post('/getListing', async (req, res) => {
   console.log("user requesting listing");
   let body = req.body;
@@ -342,7 +375,7 @@ app.post('/getListing', async (req, res) => {
   console.log(prefColorStr);
 
   // used to query database to get listing
-  query = "SELECT listingId, imagePath, creatorId, listingName, chairCondition, chairPrice, chairColor FROM (SELECT * FROM Listings WHERE listingId NOT IN (SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.id = " + userId + " AND S.userId = U.id)) AS L, (SELECT id FROM User_information WHERE id = " + userId + ") AS U WHERE L.creatorId <> U.id" + prefPriceStr + prefColorStr + prefConditionStr + ";";
+  query = "SELECT listingId, imagePath, creatorId, listingName, chairCondition, chairPrice, chairColor, Latitude, Longitude FROM (SELECT * FROM Listings WHERE listingId NOT IN (SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.id = " + userId + " AND S.userId = U.id)) AS L, (SELECT id FROM User_information WHERE id = " + userId + ") AS U WHERE L.creatorId <> U.id" + prefPriceStr + prefColorStr + prefConditionStr + ";";
   console.log(query);
   //query = "SELECT listingId, imagePath, creatorId FROM Listings WHERE listingId NOT IN ( SELECT S.listingId FROM User_information U, Seen_listings S WHERE U.id = " + userId + " AND S.userId = U.id) LIMIT 1;";
   let listingId = ""
@@ -361,7 +394,9 @@ app.post('/getListing', async (req, res) => {
   chairCondition = queryResponse[0][0].chairCondition;
   chairPrice = queryResponse[0][0].chairPrice;
   chairColor = queryResponse[0][0].chairColor;
-  console.log(listingId, listingName, chairCondition, chairPrice, chairColor);
+  Latitude = queryResponse[0][0].Latitude;
+  Longitude = queryResponse[0][0].Longitude;
+  console.log(listingId, listingName, chairCondition, chairPrice, chairColor, Latitude, Longitude);
 
   query = "SELECT username FROM User_information WHERE id = " + creatorId + ";";
   let creatorUsername = "";
@@ -376,7 +411,7 @@ app.post('/getListing', async (req, res) => {
   let responsePath = imagePath;
   console.log("Sending listing");
   console.log("--------------------------------------");
-  return res.send(JSON.stringify({imagePath: responsePath, listingId: listingId, creatorUsername: creatorUsername, listingName: listingName, chairCondition: chairCondition, chairPrice: chairPrice, chairColor: chairColor}));
+  return res.send(JSON.stringify({imagePath: responsePath, listingId: listingId, creatorUsername: creatorUsername, listingName: listingName, chairCondition: chairCondition, chairPrice: chairPrice, chairColor: chairColor, latitude: Latitude, longitude: Longitude}));
 });
 
 app.post('/getMyListings', async (req, res) => {
@@ -433,13 +468,15 @@ app.post('/addListing', upload.single('image'), async (req, res) => {
   if (!username)
     return;
 
-  let query = "SELECT id FROM User_information WHERE username = '" + username + "';"
+  let query = "SELECT id, Latitude, Longitude FROM User_information WHERE username = '" + username + "';"
   let userId = "";
   let queryResponse = await sendQuery(query);
   if (!queryResponse) {
     return;
   }
   userId = queryResponse[0][0].id;
+  userLat = queryResponse[0][0].Latitude;
+  userLong = queryResponse[0][0].Longitude;
 
   let imagePath = "/chairImages/" + newImage.filename;
   let listingName = body.name;
@@ -447,7 +484,7 @@ app.post('/addListing', upload.single('image'), async (req, res) => {
   let listingPrice = body.price;
   let listingColor = body.color;
   
-  let insertQuery = "INSERT INTO Listings (imagePath, listingName, chairCondition, chairPrice, chairColor, creatorId) VALUES ('" + imagePath + "', '" + listingName + "', '" + listingCondition + "', " + listingPrice + ", '" + listingColor + "', " + userId + ");";
+  let insertQuery = "INSERT INTO Listings (imagePath, listingName, chairCondition, chairPrice, chairColor, creatorId, Latitude, Longitude) VALUES ('" + imagePath + "', '" + listingName + "', '" + listingCondition + "', '" + listingPrice + "', '" + listingColor + "', '" + userId + "', '" + userLat + "', '" + userLong + "');";
   queryResponse = await sendQuery(insertQuery);
   if (!queryResponse)
     return;

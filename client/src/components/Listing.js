@@ -6,6 +6,9 @@ function Listing() {
     const host = process.env.REACT_APP_BACKEND_HOST;
     const [shownImage, setShownImage] = useState([]);
     const [isImgLoaded, setIsImgLoaded] = useState(false);
+    const [userLocation, setUserLocation] = useState([]);
+    const [listingLocation, setListingLocation] = useState([]);
+    const [currDistance, setDistance] = useState([]);
     const img = new Image();
 
     img.onload = () => {
@@ -13,8 +16,28 @@ function Listing() {
     }
 
     useEffect(() => {
-        getNewListing() // on page load, get first listing
+        getUserLocation();
+        getNewListing(); // on page load, get first listing
     }, []);
+
+    const getUserLocation = async () => {
+        const locationQuery = {
+            token: localStorage.getItem('token')
+        }
+        fetch(host + '/getLocation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(locationQuery)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.lat, data.long);
+            setUserLocation([data.lat, data.long]);
+        });
+        console.log(userLocation);
+    }
 
     const getNewListing = async () => {
         Authorization();
@@ -33,10 +56,28 @@ function Listing() {
         })
         .then(res => res.json())
         .then(data => {
-            console.log([data['imagePath'], data['listingId'], data['creatorUsername'], data['listingName'], data['chairCondition'], data['chairPrice'], data['chairColor']]);
-            setShownImage([data['imagePath'], data['listingId'], data['creatorUsername'], data['listingName'], data['chairCondition'], data['chairPrice'], data['chairColor']])
+            console.log([data['imagePath'], data['listingId'], data['creatorUsername'], data['listingName'], data['chairCondition'], data['chairPrice'], data['chairColor'], data['latitude'], data['longitude']]);
+            setListingLocation([data['latitude'], data['longitude']]);
+            getDistance();
+            setShownImage([data['imagePath'], data['listingId'], data['creatorUsername'], data['listingName'], data['chairCondition'], data['chairPrice'], data['chairColor'], currDistance]);
+            console.log(shownImage);
             img.src = data['imagePath']; // set source of image, needed to determine if it is loaded or not
         });
+    }
+
+    const getDistance = () => {
+        const userLat = userLocation[0];
+        const userLng = userLocation[1];
+        const listingLat = listingLocation[0];
+        const listingLng = listingLocation[1];
+        if(listingLat===null || listingLng===null) {
+            listingLat=0;
+            listingLng=0;
+        }
+
+        let distance = Math.sqrt(Math.pow(((userLat - listingLat)*69), 2) + Math.pow(((userLng - listingLng)*Math.cos((userLat+listingLat)/2)*69), 2));
+        console.log(distance);
+        setDistance(distance);
     }
 
     const imageYes = async () => {
@@ -126,7 +167,7 @@ function Listing() {
                         <h1>{shownImage[3]}</h1>
                     </div>
                     <div className = "listing-details">
-                        <h4>${shownImage[5]}&emsp;&emsp;&emsp;{shownImage[4]}&emsp;&emsp;&emsp;{shownImage[6]}</h4>
+                        <h4>${shownImage[5]}&emsp;&emsp;{shownImage[4]}&emsp;&emsp;{shownImage[6]}&emsp;&emsp;{shownImage[7]}</h4>
                     </div>
                 </div>
             </motion.div>

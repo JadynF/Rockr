@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 
 const Geolocation = ({ currentUserId }) => {
   const [location, setLocation] = useState(null);
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const host = process.env.REACT_APP_BACKEND_HOST;
 
   const fetchLocation = () => {
     if (navigator.geolocation) {
@@ -12,35 +14,41 @@ const Geolocation = ({ currentUserId }) => {
         (position) => {
           const { latitude, longitude } = position.coords;
           setLocation({ lat: latitude, lng: longitude });
-          setError("");
+          setMessage("Location grabbed. Pushing to server...");
           setLoading(false);
-
-          sendLocationToServer(currentUserId, latitude, longitude);
+          console.log(latitude, longitude);
+          sendLocationToServer(latitude, longitude);
+          console.log('Completed "sendLocationToServer"');
         },
         (err) => {
-          setError(`Error: ${err.message}`);
+          setMessage(`Error: ${err.message}`);
           setLocation(null);
           setLoading(false);
         }
       );
     } else {
-      setError('Geolocation is not supported by this browser.');
+      setMessage('Geolocation is not supported by this browser.');
     }
   };
 
-  const sendLocationToServer = async (userId, lat, lng) => {
+  const sendLocationToServer = async (lat, lng) => {
+    let mytoken = localStorage.getItem('token');
     try{
-      const response = await fetch("/api/saveLocation", {
+      await fetch(host + "/setLocation", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ latitude: lat, logitude: lng }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to save location to the server.");
-      }
-      console.log("Location saved successfully.")
-    } catch (err){
-      setError("Failed to save location to the server.");
+        headers: { 
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({ 
+          token: mytoken, 
+          latitude: lat, 
+          longitude: lng 
+        }),
+      })
+      .then(res => res.json)
+      .then(data => setMessage(data.response))
+    } catch (error) {
+      setMessage(error.response);
     }
   };
 
@@ -55,7 +63,7 @@ const Geolocation = ({ currentUserId }) => {
           <p>Longitude: {location.lng}</p>
         </div>
       )}
-      {error && <p>{error}</p>}
+      {message && <p>{message}</p>}
     </div>
   );
 };
