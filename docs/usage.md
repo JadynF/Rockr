@@ -18,6 +18,11 @@
 5. Run `node server.js`
 6. Everything should be running locally, access webpage locally through webserver specified port
 
+## Accessing Webapp online
+1. Open a browser (preferably Google Chrome)
+2. Go to the ip address: 45.55.251.146
+2. You should be able to successfully use the webapp through your browser.
+
 ## Adding to Documentation
 1. Ensure sphinx is installed (`pip install sphinx`)
 2. Ensure recommonmark is installed (`pip install recommonmark`)
