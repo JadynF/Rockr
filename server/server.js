@@ -157,7 +157,7 @@ app.post('/Register', async (req, res) => {
       from: 'rockr.verify@gmail.com',
       to: email,
       subject: 'Email Verification',
-      text: `Please verify your email by clicking this link: http://localhost:8000/VerifyEmail?token=${vToken}`
+      text: `Please verify your email by clicking this link: http://45.55.251.146/VerifyEmail?token=${vToken}`
     };
     await transporter.sendMail(mailOptions);
     return res.status(200).send(JSON.stringify({response: 'A verification email has been sent to your email.'}));
@@ -330,7 +330,7 @@ app.post('/getListing', async (req, res) => {
   let prefPriceStr = "";
   let prefColorStr = "";
   let prefConditionStr = "";
-  console.log(userPreferences.prefConditionStr);
+  console.log(userPreferences.prefCondition);
   if (userPreferences.prefPrice)
     prefPriceStr = " AND L.chairPrice <= " + userPreferences.prefPrice;
   if (userPreferences.prefColor)
@@ -350,6 +350,7 @@ app.post('/getListing', async (req, res) => {
   let imagePath = ""
   let creatorId = ""
   queryResponse = await sendQuery(query);
+  //console.log("Query Response: ", queryResponse);
   if (!queryResponse) {
     return;
   }
@@ -609,6 +610,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(8000, () => {
-    console.log(`Server is running on port 8000.`);
+app.listen(80, () => {
+    console.log(`Server is running on port 80 (http).`);
   });

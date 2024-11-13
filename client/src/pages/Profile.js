@@ -345,11 +345,11 @@ export default function Profile() {
                                 <div class="change-info-box">
                                     <label>Input New Password: </label>
                                     <div>
-                                    <input type="text" class="input-text" value={newPassword} placeholder={passwordText} onChange={(e) => setNewPassword(e.target.value)} />
+                                    <input type="password" class="input-text" value={newPassword} placeholder={passwordText} onChange={(e) => setNewPassword(e.target.value)} />
                                     </div>
                                     <label>Confirm New Password: </label>
                                     <div>
-                                        <input type="text" class="input-text" value={confirmPass} placeholder={passwordText} onChange={(e) => setConfirmPass(e.target.value)} />
+                                        <input type="password" class="input-text" value={confirmPass} placeholder={passwordText} onChange={(e) => setConfirmPass(e.target.value)} />
                                     </div>
                                     <button class="button" onClick={changePassword}>Submit New Password</button>
                                 </div>

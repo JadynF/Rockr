@@ -152,6 +152,25 @@ export default function CreateAccount() {
             }}>
                 <p>{message}</p>
             </div>
+                <div class="main-container" style = {{
+                    justifyContent: "center",
+                }}>
+                    <div class="user-info-box" style = {{
+                        display: "flex",
+                        flexDirection: "column",
+                    }}>
+                        <label class="profile-description">Return to Login page</label>
+                        <Link to="/Login" style = {{
+                            backgroundImage: "linear-gradient(to right, #fc2776, #ff6630)",
+                            color: "white",
+                            padding: "5px 10px",
+                            borderColor: "white",
+                            borderRadius: "100px",
+                            cursor: "pointer",
+                            margin: "10px",
+                        }}>Login Page</Link>
+                    </div>
+                </div>
         </div>
     )
 }

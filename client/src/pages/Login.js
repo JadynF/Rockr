@@ -93,7 +93,7 @@ export default function Login() {
                             flexDirection: "column",
                         }}>
                         <label class="login-label">Password: </label>
-                            <input type="text" class="input-text" id="passInputText" name="passInputText" placeholder="Password" onChange={handlePasswordChange} style = {{
+                            <input type="password" class="input-text" id="passInputText" name="passInputText" placeholder="Password" onChange={handlePasswordChange} style = {{
                                 width: "70%",
                                 padding: "0",
                                 margin: "0",
